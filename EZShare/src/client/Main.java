@@ -10,11 +10,15 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import bean.Resource;
+
 public class Main {
 
+	static Resource resource = null;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] arg1 = {"-help"};
+		String[] arg1 = {"-tags","[\"yes\",\"no\"]"};
 		
 		Options options = new Options();
 		//options(args,options);
@@ -33,10 +37,14 @@ public class Main {
 			
 			if(commandLine.hasOption("channel")){
 				//stub
+				String value = commandLine.getOptionValue("channel");
+				resource.setChannel(value);
 			}
 			
-			if(commandLine.hasOption("descreption")){
+			if(commandLine.hasOption("description")){
 				//stub
+				String value = commandLine.getOptionValue("description");
+				resource.setDescription(value);
 			}
 			
 			if(commandLine.hasOption("exchange")){
@@ -53,10 +61,14 @@ public class Main {
 			
 			if(commandLine.hasOption("name")){
 				//stub
+				String value = commandLine.getOptionValue("name");
+				resource.setName(value);
 			}
 			
 			if(commandLine.hasOption("owner")){
 				//stub
+				String value = commandLine.getOptionValue("owner");
+				resource.setOwner(value);
 			}
 			
 			if(commandLine.hasOption("port")){
@@ -82,9 +94,19 @@ public class Main {
 			}
 			if(commandLine.hasOption("tags")){
 				//stub
+				String value = commandLine.getOptionValue("tags");
+				System.out.println(value);
+				resource.setChannel(value);
 			}
 			if(commandLine.hasOption("uri")){
 				//stub
+				String value = commandLine.getOptionValue("uri");
+				resource.setURI(value);
+			}
+			if(commandLine.hasOption("ezServer")){
+				//stub
+				String value = commandLine.getOptionValue("ezServer");
+				resource.setEZserver(value);
 			}
 			
 		} catch (ParseException e) {
@@ -162,13 +184,17 @@ public class Main {
 	     opt.setRequired(false);
 	     options.addOption(opt15);
 	     
-	     Option opt16 = new Option("tag",true,"resource tag1, tag2, tag3, ..");
+	     Option opt16 = new Option("tags",true,"resource tag1, tag2, tag3, ..");
 	     opt.setRequired(false);
 	     options.addOption(opt16);
 	     
 	     Option opt17 = new Option("uri",true,"resource URI");
 	     opt.setRequired(false);
 	     options.addOption(opt17);
+	     
+	     Option opt18 = new Option("ezServer",true,"resource server");
+	     opt.setRequired(false);
+	     options.addOption(opt18);
 	}
 
 }
