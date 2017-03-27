@@ -1,3 +1,20 @@
 2017/3/24 23:31 EDIT  client.Main  Steve
 2017/3/27 14:49 EDIT  client.Main, bean.ResourceTemplate, bean.ClientJSON Scott
 2017/3/27 17:04 CREATE clietnControl.Publish(empty), clientIO.Listener(empty)
+2017/3/28 10:11 EDIT  bean.ClientJSON  change type of delay **from BOOLEAN->String**   
+2017/3/28 10:11 EDIT  Handle the bug that attributes which the value is null will also be print.
+use this code before transfer java object to JSON object:*****(example in client.Main "publish" block)
+****
+JsonConfig config = new JsonConfig();  
+	config.setJsonPropertyFilter(new PropertyFilter()  
+{  
+ @Override  
+public boolean apply(Object source, String name, Object value)  
+{  
+return value == null;  
+}  
+}); 
+ClientJSON cJSON = new ClientJSON();
+cJSON.setCommand("publish");
+cJSON.setResource(resource);
+JSONObject jObject = JSONObject.fromObject(cJSON,config);                  
