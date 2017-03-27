@@ -18,8 +18,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] arg1 = {"-tags","[\"yes\",\"no\"]"};
+		String[] arg1 = {};
 		
+		resource = new Resource();
 		Options options = new Options();
 		//options(args,options);
 		options(arg1,options);
@@ -49,6 +50,7 @@ public class Main {
 			
 			if(commandLine.hasOption("exchange")){
 				//stub
+				
 			}
 			
 			if(commandLine.hasOption("fetch")){

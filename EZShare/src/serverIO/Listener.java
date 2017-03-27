@@ -14,6 +14,7 @@ public class Listener {
 		try {
 			ServerSocket listenSocket = new ServerSocket(port);
 			
+			
 			while(true){
 				Socket clientSocket = listenSocket.accept();
 				if(Debug.isDebug){

@@ -11,7 +11,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] arg1 ={"-h"};
+		String[] arg1 ={"-a","steve"};
 		
 		System.out.println("[EZShare.server] - [INFO] - Starting the EZShare Server");
 		Options options = new Options();
