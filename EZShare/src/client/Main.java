@@ -10,7 +10,11 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import bean.ClientJSON;
 import bean.Resource;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.util.PropertyFilter;
 
 public class Main {
 
@@ -18,7 +22,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] arg1 = {};
+		String[] arg1 = {"-publish","-name","aaa","-uri","www.unimelb"};
 		
 		resource = new Resource();
 		Options options = new Options();
@@ -48,15 +52,6 @@ public class Main {
 				resource.setDescription(value);
 			}
 			
-			if(commandLine.hasOption("exchange")){
-				//stub
-				
-			}
-			
-			if(commandLine.hasOption("fetch")){
-				//stub
-			}
-			
 			if(commandLine.hasOption("host")){
 				//stub
 			}
@@ -65,6 +60,24 @@ public class Main {
 				//stub
 				String value = commandLine.getOptionValue("name");
 				resource.setName(value);
+			}
+			
+			if(commandLine.hasOption("tags")){
+				//stub
+				String value = commandLine.getOptionValue("tags");
+				resource.setChannel(value);
+			}
+			
+			if(commandLine.hasOption("uri")){
+				//stub
+				String value = commandLine.getOptionValue("uri");
+				resource.setURI(value);
+			}
+			
+			if(commandLine.hasOption("ezServer")){
+				//stub
+				String value = commandLine.getOptionValue("ezServer");
+				resource.setEZserver(value);
 			}
 			
 			if(commandLine.hasOption("owner")){
@@ -76,40 +89,60 @@ public class Main {
 			if(commandLine.hasOption("port")){
 				//stub
 			}
-			if(commandLine.hasOption("publish")){
+
+			if(commandLine.hasOption("exchange")){
+				//stub
+				
+			}
+			
+			if(commandLine.hasOption("fetch")){
 				//stub
 			}
+			
+			if(commandLine.hasOption("publish")){
+				//stub
+				JsonConfig config = new JsonConfig();  
+				config.setJsonPropertyFilter(new PropertyFilter()  
+				{  
+				    @Override  
+				    public boolean apply(Object source, String name, Object value)  
+				    {  
+				        return value == null;  
+				    }  
+				}); 
+				ClientJSON cJSON = new ClientJSON();
+				cJSON.setCommand("publish");
+				cJSON.setResource(resource);
+				JSONObject jObject = JSONObject.fromObject(cJSON,config);
+				System.out.println(jObject);
+//				JSONObject jObject = new JSONObject();
+//				jObject.put("name", "ddd");
+//				jObject.put("uri", null);
+//				System.out.println(jObject.get("uri"));
+				
+				
+			}
+			
 			if(commandLine.hasOption("query")){
 				//stub
 			}
+			
 			if(commandLine.hasOption("remove")){
 				//stub
 			}
+			
 			if(commandLine.hasOption("secret")){
 				//stub
 			}
+			
 			if(commandLine.hasOption("servers")){
 				//stub
 			}
+			
 			if(commandLine.hasOption("share")){
 				//stub
 			}
-			if(commandLine.hasOption("tags")){
-				//stub
-				String value = commandLine.getOptionValue("tags");
-				System.out.println(value);
-				resource.setChannel(value);
-			}
-			if(commandLine.hasOption("uri")){
-				//stub
-				String value = commandLine.getOptionValue("uri");
-				resource.setURI(value);
-			}
-			if(commandLine.hasOption("ezServer")){
-				//stub
-				String value = commandLine.getOptionValue("ezServer");
-				resource.setEZserver(value);
-			}
+			
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
