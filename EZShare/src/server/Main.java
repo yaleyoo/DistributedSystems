@@ -1,6 +1,7 @@
 package server;
-import java.io.IOException;
-import java.net.ServerSocket;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.cli.*;
 
@@ -12,8 +13,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String[] arg1 ={"-a","steve"};
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
 		
-		System.out.println("[EZShare.server] - [INFO] - Starting the EZShare Server");
+		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
 		Options options = new Options();
 		//options(args,options);
 		options(arg1,options);
@@ -35,7 +37,7 @@ public class Main {
 			if(commandLine.hasOption("a")){
 				String value = commandLine.getOptionValue("a");
 				if(value==null){// command without arg   ERR
-					System.out.println("[EZShare.server] - [Error] - Command 'advertisedhost' should have arg");
+					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'advertisedhost' should have arg");
 				}
 				else{// command with arg 
 					AdvertiseHost aHost = new AdvertiseHost();
@@ -46,7 +48,7 @@ public class Main {
 			if(commandLine.hasOption("c")){
 				String value = commandLine.getOptionValue("c");
 				if(value==null){// command without arg   ERR
-					System.out.println("[EZShare.server] - [Error] - Command 'connectionintervallimit' should have arg");
+					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have arg");
 				}
 				else{// command with arg 
 					if(Kits.isNumeric(value)){// arg is number
@@ -55,7 +57,7 @@ public class Main {
 						cIL.connectionIntervalLimit(intervalLimit);
 					}
 					else{//arg is not number
-						System.out.println("[EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
+						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
 					}
 				}
 			
@@ -64,7 +66,7 @@ public class Main {
 			if(commandLine.hasOption("e")){
 				String value = commandLine.getOptionValue("e");
 				if(value==null){// command without arg   ERR
-					System.out.println("[EZShare.server] - [Error] - Command 'exchangeinterval' should have arg");
+					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'exchangeinterval' should have arg");
 				}
 				else{// command with arg 
 					if(Kits.isNumeric(value)){// arg is number
@@ -72,7 +74,7 @@ public class Main {
 						ExchangeInterval.exChangeIntervalLimit(intervalLimit);
 					}
 					else{//arg is not number
-						System.out.println("[EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
+						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
 					}
 				}
 			}
@@ -85,7 +87,7 @@ public class Main {
 			if(commandLine.hasOption("p")){
 				String value = commandLine.getOptionValue("p");
 				if(value==null){// command without arg   ERR
-					System.out.println("[EZShare.server] - [Error] - Command 'port' should have arg");
+					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'port' should have arg");
 				}
 				else{// command with arg 
 					if(Kits.isNumeric(value)){// arg is number
@@ -94,7 +96,7 @@ public class Main {
 						p.bindtoPort(port);
 					}
 					else{//arg is not number
-						System.out.println("[EZShare.server] - [Error] - Command 'port' should have integer arg");
+						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'port' should have integer arg");
 					}
 				}
 			}
@@ -103,7 +105,7 @@ public class Main {
 
 				String value = commandLine.getOptionValue("s");
 				if(value==null){// command without arg   ERR
-					System.out.println("[EZShare.server] - [Error] - Command 'secret' should have arg");
+					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'secret' should have arg");
 				}
 				else{// command with arg 
 					Secret secret = new Secret();
@@ -145,7 +147,7 @@ public class Main {
 //		Port port = new Port();
 //		port.bindtoPort();
 
-		System.out.println("[EZShare.server] - [INFO] - started");
+		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - started");
 		Listener listener = new Listener();
 		listener.listening();
 		

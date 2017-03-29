@@ -1,5 +1,7 @@
 package serverControl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Secret {
@@ -7,16 +9,18 @@ public class Secret {
 	
 	public Secret(){
 		UUID uuid = UUID.randomUUID();
-		this.secret = uuid.toString();
+		Secret.secret = uuid.toString();
 	}
 	
 	public void setSecret(String secret){
-		this.secret = secret;
-		System.out.println("[EZShare.serverControl] - [INFO] - using secret: "+secret);
+		Secret.secret = secret;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		System.out.println(sdf.format(new Date())+" - [EZShare.serverControl] - [INFO] - using secret: "+secret);
 	}
 	
 	public void setSecret(){
-		System.out.println("[EZShare.serverControl] - [INFO] - using secret: "+secret);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		System.out.println(sdf.format(new Date())+" - [EZShare.serverControl] - [INFO] - using secret: "+secret);
 	}
 
 	

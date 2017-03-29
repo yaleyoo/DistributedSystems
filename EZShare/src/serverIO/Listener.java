@@ -8,6 +8,7 @@ import serverControl.*;
 
 public class Listener {
 	
+	@SuppressWarnings("resource")
 	public void listening(){
 		int port = Port.port;
 		
@@ -21,7 +22,7 @@ public class Listener {
 					System.out.println("received message");
 				}
 				
-				Connection c = new Connection(clientSocket);
+				new Connection(clientSocket);
 			}
 			
 		} catch (IOException e) {

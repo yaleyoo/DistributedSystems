@@ -1,29 +1,30 @@
 package clientControl;
 
-import bean.ClientJSON;
+import bean.*;
+import clientIO.Sender;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 
 public class Exchange {
 	
-	private ClientJSON clientJson;
+	private ExchangeJSON exchangeJson;
 	
 	public Exchange() {
-		clientJson = new ClientJSON();
+		exchangeJson = new ExchangeJSON();
 	}
 
 	public void setCommand(String command) {
-		this.clientJson.setCommand(command); 
+		this.exchangeJson.setCommand(command); 
 	}
 	
 	public void setServerList(String[] serverList) {
-		this.clientJson.setServerList(serverList);
+		this.exchangeJson.setServerList(serverList);
 	}
-	public void printExchange() {
+	public void sendRequest() {
 		JSONObject exchangeItems = new JSONObject();
 
-		String[] serverLists = clientJson.getServerList();
+		String[] serverLists = exchangeJson.getServerList();
 		
 		JSONArray value = new JSONArray();
 		
@@ -34,10 +35,7 @@ public class Exchange {
 			value.add(exchangeItems);
 		}
 		
-		JSONObject exchangeObj = new JSONObject();
-		exchangeObj.put("command", clientJson.getCommand());
-		exchangeObj.put("serverList", value);
-		
-		System.out.println(exchangeObj);
+		Sender sender = new Sender();
+		sender.sendRequest(exchangeJson);
 	}
 }

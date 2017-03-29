@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import serverControl.Debug;
 
@@ -26,8 +28,10 @@ public class Connection extends Thread {
 	public void run(){
 		try { // an echo server
 			String data = in.readUTF(); // read a line of data from the stream
-			if(Debug.isDebug)
-				System.out.println("[EZShare.serverIO] - [FINE] - receive data:"+data);
+			if(Debug.isDebug){
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - receive data:"+data);
+				}
 			out.writeUTF(data);
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());

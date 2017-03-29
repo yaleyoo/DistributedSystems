@@ -2,6 +2,8 @@ package serverControl;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AdvertiseHost {
 	public static String advertiseHost;
@@ -16,12 +18,14 @@ public class AdvertiseHost {
 	}
 	
 	public void setAdvertiseHost(String hostname){
-		this.advertiseHost = hostname;
-		System.out.println("[EZShare.serverControl] - [INFO] - using advertised hostname "+advertiseHost);
+		AdvertiseHost.advertiseHost = hostname;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		System.out.println(sdf.format(new Date())+" - [EZShare.serverControl] - [INFO] - using advertised hostname "+advertiseHost);
 	}
 	
 	public void setAdvertiseHost(){
-		System.out.println("[EZShare.serverControl] - [INFO] - using advertised hostname "+advertiseHost);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		System.out.println(sdf.format(new Date())+" - [EZShare.serverControl] - [INFO] - using advertised hostname "+advertiseHost);
 	}
 	
 

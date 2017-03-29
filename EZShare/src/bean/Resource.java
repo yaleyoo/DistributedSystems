@@ -3,14 +3,13 @@ package bean;
 
 
 public class Resource{
-	private String Name="";
+	private String Name;
 	private String Description;
-	private String[] Tags={""};
-	private String URI="";
-	private String Channel="";
-	private String Owner="";
-	private String EZserver="";
-	
+	private String[] Tags;
+	private String URI;
+	private String Channel;
+	private String Owner;
+	private String EZserver;
 	
 	////////////getter&setter
 	public String getName() {
