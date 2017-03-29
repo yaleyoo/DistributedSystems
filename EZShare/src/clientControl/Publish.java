@@ -1,33 +1,36 @@
 package clientControl;
 
 import bean.ClientJSON;
-import bean.Resource;
+import clientIO.Sender;
+import bean.*;
 import net.sf.json.JSONObject;
 
 
 public class Publish {
 	
-	private ClientJSON clientJson;
+	private PublishJSON publishJson;
 	
 	public Publish() {
-		clientJson = new ClientJSON();
+		publishJson = new PublishJSON();
 	}
 
 	public void setCommand(String command) {
-		this.clientJson.setCommand(command); 
+		this.publishJson.setCommand(command); 
 	}
 	
 	public void setResource(Resource resource) {
-		this.clientJson.setResource(resource);
+		this.publishJson.setResource(resource);
 	}
 	
-	public void printPublish() {
+	public void sendRequest() {
 		JSONObject publishItems = new JSONObject();
 		
-		publishItems.put("command", clientJson.getCommand());
-		publishItems.put("resource", clientJson.getResource());
+		publishItems.put("command", publishJson.getCommand());
+		publishItems.put("resource", publishJson.getResource());
 		
-		System.out.println(publishItems);
+
+		Sender sender = new Sender();
+		sender.sendRequest(publishJson);
 	}
 }
 
