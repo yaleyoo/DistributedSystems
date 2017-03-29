@@ -1,16 +1,12 @@
 package client;
-import java.util.ArrayList;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
-import bean.Resource;
+import bean.*;
 import clientControl.*;
+import clientIO.Sender;
 
 public class Main {
 
@@ -18,11 +14,15 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		
 		resource = new Resource();
 		Options options = new Options();
+		//options(args,options);
 		options(args,options);
 		CommandLine commandLine = null;
 	    CommandLineParser parser = new DefaultParser();
+	    
 	    try {
 			commandLine = parser.parse(options, args);
 			
@@ -30,6 +30,11 @@ public class Main {
 				HelpFormatter hf = new HelpFormatter();
 			    hf.setWidth(110);
 			    hf.printHelp("Command Help", options, true);
+			}
+			
+			if(commandLine.hasOption("debug")){
+				//stub
+				Debug.isDebug = true;
 			}
 			
 			if(commandLine.hasOption("channel")){
@@ -44,48 +49,23 @@ public class Main {
 				resource.setDescription(value);
 			}
 			
-			if(commandLine.hasOption("fetch")){
-				//stub
-			}
-			
 			if(commandLine.hasOption("host")){
 				//stub
+				String value = commandLine.getOptionValue("host");
+				try {
+					InetAddress address = InetAddress.getByName(value);
+					Sender.address = address;
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 			
 			if(commandLine.hasOption("name")){
 				//stub
 				String value = commandLine.getOptionValue("name");
 				resource.setName(value);
-			}
-			
-			if(commandLine.hasOption("owner")){
-				//stub
-				String value = commandLine.getOptionValue("owner");
-				resource.setOwner(value);
-			}
-			
-			if(commandLine.hasOption("port")){
-				//stub
-			}
-			
-			if(commandLine.hasOption("query")){
-				//stub
-			}
-			
-			if(commandLine.hasOption("remove")){
-				//stub
-			}
-			
-			if(commandLine.hasOption("secret")){
-				//stub
-			}
-			
-			if(commandLine.hasOption("servers")){
-				//stub
-			}
-			
-			if(commandLine.hasOption("share")){
-				//stub
 			}
 			
 			if(commandLine.hasOption("tags")){
@@ -106,20 +86,22 @@ public class Main {
 				resource.setEZserver(value);
 			}
 			
-			if(commandLine.hasOption("publish")){
-				Publish publish = new Publish();
-				
-				publish.setCommand("PUBLISH");
-				publish.setResource(resource);
-				publish.printPublish();
-				/**
-				 * test argument for publish command.
-				 * go to Run -> Run Configurations.. -> click arguments and copy/paste below line
-				 * -publish -name "Unimelb website" -description "The main page for the University of Melbourne" -uri http://www.unimelb.edu.au -tags web,html -debug
-				 * */
+			if(commandLine.hasOption("owner")){
+				//stub
+				String value = commandLine.getOptionValue("owner");
+				resource.setOwner(value);
 			}
 			
+			if(commandLine.hasOption("port")){
+				//stub
+				String value = commandLine.getOptionValue("port");
+				Sender.port = Integer.valueOf(value);
+			}
+			
+			////////functional commands
+
 			if(commandLine.hasOption("exchange")){
+				//stub
 				String value = commandLine.getOptionValue("servers");
 				String[] serverLists = value.split(",");
 				
@@ -127,13 +109,43 @@ public class Main {
 				exchange.setCommand("EXCHANGE");
 				exchange.setServerList(serverLists);
 				
-				exchange.printExchange();
-				/**
-				 * test argument for exchange command
-				 * go to Run -> Run Configurations.. -> click arguments and copy/paste below line
-				 * -exchange -servers 115.146.85.165:3780,115.146.85.24:3780 -debug
-				 * */
-		}
+				exchange.sendRequest();
+			}
+			
+			if(commandLine.hasOption("fetch")){
+				//stub
+			}
+			
+			if(commandLine.hasOption("publish")){
+				//stub
+				Publish publish = new Publish();
+				
+				publish.setCommand("PUBLISH");
+				publish.setResource(resource);
+				publish.sendRequest();
+			}
+			
+			if(commandLine.hasOption("query")){
+				//stub
+			}
+			
+			if(commandLine.hasOption("remove")){
+				//stub
+			}
+			
+			if(commandLine.hasOption("secret")){
+				//stub
+				String value = commandLine.getOptionValue("port");
+				Secret.secret = value;
+			}
+			
+			if(commandLine.hasOption("servers")){
+				//stub
+			}
+			
+			if(commandLine.hasOption("share")){
+				//stub
+			}
 			
 			
 		} catch (ParseException e) {
@@ -225,4 +237,3 @@ public class Main {
 	}
 
 }
-
