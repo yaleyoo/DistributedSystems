@@ -17,4 +17,6 @@ return value == null;
 ClientJSON cJSON = new ClientJSON();
 cJSON.setCommand("publish");
 cJSON.setResource(resource);
-JSONObject jObject = JSONObject.fromObject(cJSON,config);                  
+JSONObject jObject = JSONObject.fromObject(cJSON,config);    
+              
+2017/3/31 23:49 CREATE clientContril Share&Fetch
