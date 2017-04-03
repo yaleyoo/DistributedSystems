@@ -36,8 +36,8 @@ public class Connection extends Thread {
 				}
 			Processor processor = new Processor();
 			processor.getClientJSON(JSONObject.fromObject(data));
-			processor.assignRequest();
-			out.writeUTF(data);
+			JSONObject jObject = processor.assignRequest();
+			out.writeUTF(jObject.toString());
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {
