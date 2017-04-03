@@ -23,14 +23,14 @@ public class Fetch {
 	}
 	
 	public void sendRequest() {
-		JSONObject publishItems = new JSONObject();
+		JSONObject fetchItems = new JSONObject();
 		
-		publishItems.put("command", fetchJson.getCommand());
-		publishItems.put("resource", fetchJson.getResource());
+		fetchItems.put("command", fetchJson.getCommand());
+		fetchItems.put("resource", fetchJson.getResource());
 		
 
 		Sender sender = new Sender();
-		sender.sendRequest(fetchJson);
+		sender.sendRequest(fetchItems);
 	}
 }
 

@@ -8,10 +8,10 @@ import net.sf.json.JSONObject;
 
 public class Publish {
 	
-	private PublishJSON publishJson;
+	private ClientJSON publishJson;
 	
 	public Publish() {
-		publishJson = new PublishJSON();
+		publishJson = new ClientJSON();
 	}
 
 	public void setCommand(String command) {
@@ -23,14 +23,19 @@ public class Publish {
 	}
 	
 	public void sendRequest() {
+		
 		JSONObject publishItems = new JSONObject();
 		
 		publishItems.put("command", publishJson.getCommand());
 		publishItems.put("resource", publishJson.getResource());
 		
+		
+		
+		System.out.println(publishItems);
+		
 
 		Sender sender = new Sender();
-		sender.sendRequest(publishJson);
+		sender.sendRequest(publishItems);
 	}
 }
 

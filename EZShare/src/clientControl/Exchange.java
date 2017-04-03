@@ -8,23 +8,23 @@ import net.sf.json.JSONObject;
 
 public class Exchange {
 	
-	private ExchangeJSON exchangeJson;
+	private ClientJSON clientJSON;
 	
 	public Exchange() {
-		exchangeJson = new ExchangeJSON();
+		clientJSON = new ClientJSON();
 	}
 
 	public void setCommand(String command) {
-		this.exchangeJson.setCommand(command); 
+		this.clientJSON.setCommand(command); 
 	}
 	
 	public void setServerList(String[] serverList) {
-		this.exchangeJson.setServerList(serverList);
+		this.clientJSON.setServerList(serverList);
 	}
 	public void sendRequest() {
 		JSONObject exchangeItems = new JSONObject();
 
-		String[] serverLists = exchangeJson.getServerList();
+		String[] serverLists = clientJSON.getServerList();
 		
 		JSONArray value = new JSONArray();
 		
@@ -35,7 +35,15 @@ public class Exchange {
 			value.add(exchangeItems);
 		}
 		
+		
+		exchangeItems.put("command", clientJSON.getCommand());
+		exchangeItems.put("serverList", value);
+		
+		//exchangeJson.setServerList((String[]) exchangeObj.get("serverList")); 
+		
 		Sender sender = new Sender();
-		sender.sendRequest(exchangeJson);
+		sender.sendRequest(exchangeItems);
+		
+//		System.out.println(exchangeObj);
 	}
 }

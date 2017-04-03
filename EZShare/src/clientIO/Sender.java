@@ -7,17 +7,14 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import bean.*;
 import clientControl.Debug;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.PropertyFilter;
 
 public class Sender {
 	public static InetAddress address=null;
 	public static int port=0;
 	
-	public void sendRequest(ClientJSON clientJSON){
+	public void sendRequest(JSONObject jObject){
 		Socket s = null;
 		try{
 //			InetAddress address = InetAddress.getByName("127.0.0.1");
@@ -38,16 +35,16 @@ public class Sender {
 			DataOutputStream output = new DataOutputStream(s.getOutputStream());
 			
 			///transfer ClientJSON to JSONObject
-			JsonConfig config = new JsonConfig();  
-			config.setJsonPropertyFilter(new PropertyFilter()  
-			{  
-			    @Override  
-			    public boolean apply(Object source, String name, Object value)  
-			    {  
-			        return value == null;  
-			    }  
-			}); 
-			JSONObject jObject = JSONObject.fromObject(clientJSON,config);
+//			JsonConfig config = new JsonConfig();  
+//			config.setJsonPropertyFilter(new PropertyFilter()  
+//			{  
+//			    @Override  
+//			    public boolean apply(Object source, String name, Object value)  
+//			    {  
+//			        return value == null;  
+//			    }  
+//			}); 
+//			JSONObject jObject = JSONObject.fromObject(clientJSON,config);
 			
 			if(Debug.isDebug){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");

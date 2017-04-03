@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.sf.json.JSONObject;
+import processor.Processor;
 import serverControl.Debug;
 
 public class Connection extends Thread {
@@ -32,6 +34,9 @@ public class Connection extends Thread {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
 				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - receive data:"+data);
 				}
+			Processor processor = new Processor();
+			processor.getClientJSON(JSONObject.fromObject(data));
+			processor.assignRequest();
 			out.writeUTF(data);
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());

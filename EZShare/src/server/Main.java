@@ -1,17 +1,22 @@
 package server;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.cli.*;
 
+import bean.Resource;
 import serverControl.*;
 import serverIO.Listener;
 
 public class Main {
+	public static List<Resource> resourceList;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		resourceList = new ArrayList<Resource>();
 		String[] arg1 ={"-a","steve"};
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
 		

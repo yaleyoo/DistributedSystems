@@ -18,19 +18,24 @@ public class Share {
 		this.shareJson.setCommand(command); 
 	}
 	
+	public void setSecret(String secret){
+		this.shareJson.setSecret(secret);
+	}
+	
 	public void setResource(Resource resource) {
 		this.shareJson.setResource(resource);
 	}
 	
 	public void sendRequest() {
-		JSONObject publishItems = new JSONObject();
+		JSONObject shareItems = new JSONObject();
 		
-		publishItems.put("command", shareJson.getCommand());
-		publishItems.put("resource", shareJson.getResource());
+		shareItems.put("command", shareJson.getCommand());
+		shareItems.put("secret", shareJson.getSecret());
+		shareItems.put("resource", shareJson.getResource());
 		
 
 		Sender sender = new Sender();
-		sender.sendRequest(shareJson);
+		sender.sendRequest(shareItems);
 	}
 }
 
