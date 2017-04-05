@@ -10,21 +10,22 @@ import clientIO.Sender;
 
 public class Main {
 
-	static Resource resource = null;
+	static ResourceTemplate resource = null;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] arg1 = {"-exchange","-servers","192.168.1.1:8080,122.112.122.122:8080","-debug"};
 		
-		resource = new Resource();
+//		String[] arg1 = {"-remove","-name","aaa","-debug"};
+		resource = new ResourceTemplate();
 		Options options = new Options();
-		//options(args,options);
-		options(arg1,options);
+		options(args,options);
+//		options(arg1,options);
 		CommandLine commandLine = null;
 	    CommandLineParser parser = new DefaultParser();
 	    
 	    try {
-			commandLine = parser.parse(options, arg1);
+	    	commandLine = parser.parse(options, args);
+//			commandLine = parser.parse(options, arg1);
 			
 			if(commandLine.hasOption("help")){
 				HelpFormatter hf = new HelpFormatter();
@@ -77,13 +78,13 @@ public class Main {
 			if(commandLine.hasOption("uri")){
 				//stub
 				String value = commandLine.getOptionValue("uri");
-				resource.setURI(value);
+				resource.seturi(value);
 			}
 			
 			if(commandLine.hasOption("ezServer")){
 				//stub
 				String value = commandLine.getOptionValue("ezServer");
-				resource.setEZserver(value);
+				resource.setezserver(value);
 			}
 			
 			if(commandLine.hasOption("owner")){
@@ -97,7 +98,16 @@ public class Main {
 				String value = commandLine.getOptionValue("port");
 				Sender.port = Integer.valueOf(value);
 			}
-			
+
+			if(commandLine.hasOption("secret")){
+				//stub
+				String value = commandLine.getOptionValue("port");
+				Secret.secret = value;
+			}
+
+			if(commandLine.hasOption("servers")){
+				//stub
+			}
 			////////functional commands
 
 			if(commandLine.hasOption("exchange")){
@@ -114,10 +124,10 @@ public class Main {
 			
 			if(commandLine.hasOption("fetch")){
 				//stub
+				ResourceTemplate rt = resource;
+				
 				Fetch fetch = new Fetch();
-				fetch.setCommand("FETCH");
-				fetch.setResource(resource);
-				fetch.sendRequest();
+				fetch.sendRequest(rt);
 			}
 			
 			if(commandLine.hasOption("publish")){
@@ -132,35 +142,22 @@ public class Main {
 			if(commandLine.hasOption("query")){
 				//stub
 				Query query = new Query();
-				query.setCommand("QUERY");
-				query.setResource(resource);
-				query.sendRequest();
+				query.sendRequest(resource);
+				
 			}
 			
 			if(commandLine.hasOption("remove")){
 				//stub
-				Remove remove = new Remove();
-				remove.setCommand("REMOVE");
-				remove.setResource(resource);
-				remove.sendRequest();
+				Remove remove = new Remove();			
+				remove.sendRequest(resource);
 			}
 			
-			if(commandLine.hasOption("secret")){
-				//stub
-				String value = commandLine.getOptionValue("port");
-				Secret.secret = value;
-			}
-			
-			if(commandLine.hasOption("servers")){
-				//stub
-			}
 			
 			if(commandLine.hasOption("share")){
 				//stub
 				Share share = new Share();
-				share.setCommand("SHARE");
-				share.setResource(resource);
-				share.sendRequest();
+				share.sendRequest(Secret.secret, resource);
+				
 			}
 			
 			

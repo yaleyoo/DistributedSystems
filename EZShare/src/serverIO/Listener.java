@@ -18,9 +18,7 @@ public class Listener {
 			
 			while(true){
 				Socket clientSocket = listenSocket.accept();
-				if(Debug.isDebug){
-					System.out.println("received message");
-				}
+				
 				
 				new Connection(clientSocket);
 			}

@@ -1,36 +1,17 @@
 package clientControl;
 
-import bean.ClientJSON;
+import bean.ResourceTemplate;
 import clientIO.Sender;
-import bean.*;
 import net.sf.json.JSONObject;
 
-
 public class Query {
-	
-	private ClientJSON queryJson;
-	
-	public Query() {
-		queryJson = new ClientJSON();
-	}
-
-	public void setCommand(String command) {
-		this.queryJson.setCommand(command); 
-	}
-	
-	public void setResource(Resource resource) {
-		this.queryJson.setResource(resource);
-	}
-	
-	public void sendRequest() {
-		JSONObject queryServer = new JSONObject();
+	public void sendRequest(ResourceTemplate rt){
+		JSONObject jObject = new JSONObject();
+		jObject.put("command", "QUERY");
+		jObject.put("relay", true);
+		jObject.put("resourceTemplate", rt);
 		
-		queryServer.put("command", queryJson.getCommand());
-		queryServer.put("relay", true);
-		queryServer.put("resource", queryJson.getResource());
-		
-
 		Sender sender = new Sender();
-		sender.sendRequest(queryServer);
+		sender.sendRequest(jObject);
 	}
 }

@@ -11,45 +11,38 @@ public class Processor {
 		
 	}
 	
-	public JSONObject assignRequest(){
+	public void assignRequest(){
 		String command = clientJSON.getCommand();
 		
 		if(command.equals("EXCHANGE")){
 			ExchangeProcessor ep = new ExchangeProcessor();
-			return ep.process(clientJSON);
+			ep.process(clientJSON);
 		}
 		
 		if(command.equals("FETCH")){
 			FetchProcessor fp = new FetchProcessor();
-			return fp.process(clientJSON);
+			fp.process(clientJSON);
 		}
 		
 		if(command.equals("PUBLISH")){
 			PublishProcessor pp = new PublishProcessor();
-			return pp.process(clientJSON);
+			pp.process(clientJSON);
 		}
 		
 		if(command.equals("QUERY")){
 			QueryProcessor qp = new QueryProcessor();
-			return qp.process(clientJSON);
+			qp.process(clientJSON);
 		}
 		
 		if(command.equals("REMOVE")){
 			RemoveProcessor rp = new RemoveProcessor();
-			return rp.process(clientJSON);
+			rp.process(clientJSON);
 		}
 		
 		if(command.equals("SHARE")){
 			ShareProcessor sp = new ShareProcessor();
-			return sp.process(clientJSON);
+			sp.process(clientJSON);
 		}
-		
-		else{
-			JSONObject jObject = new JSONObject();
-			jObject.put("err", "wrong command");
-			return jObject;
-		}
-		
 		
 	}
 }

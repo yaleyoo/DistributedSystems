@@ -2,6 +2,10 @@ package clientIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -28,7 +32,7 @@ public class Sender {
 			}
 			s = new Socket(address,port);
 			if(Debug.isDebug){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 				System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - connection established");
 			}
 			DataInputStream input = new DataInputStream(s.getInputStream());
@@ -47,15 +51,34 @@ public class Sender {
 //			JSONObject jObject = JSONObject.fromObject(clientJSON,config);
 			
 			if(Debug.isDebug){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
-				System.out.println(sdf.format(new Date())+" - [EZShare.clientControl] - [INFO] - sending request:"+jObject.toString());
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+				System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - sending request:"+jObject.toString());
 			}
 			output.writeUTF(jObject.toString());
-			String reply = input.readUTF();
-			if(Debug.isDebug)
-				System.out.println("received:"+reply);
 			
 			
+			//receive replys
+			boolean isEndFlag = false;
+			
+			while(!isEndFlag){
+					try{
+						String reply = input.readUTF();
+						if(Debug.isDebug){
+							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+							System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - RECEIVED:"+reply);
+						}
+						JSONObject fileJSON = JSONObject.fromObject(reply);
+						if(fileJSON.has("resourceSize")){
+							fetchResource(fileJSON, input);
+						}
+						
+					}catch(EOFException e){
+						isEndFlag = true;
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -67,5 +90,28 @@ public class Sender {
 				}
 			}
 		}
+	}
+	
+	public void fetchResource(JSONObject fileJSON,DataInputStream input) throws IOException{
+		String dir = fileJSON.getString("uri");
+		String[] list = dir.split("/");
+		//create file named as resource name&&&& save in current folder
+		File file = new File("./"+list[list.length-1]);
+		
+		@SuppressWarnings("resource")
+		FileOutputStream fileOut = new FileOutputStream(file);
+		
+		int len = fileJSON.getInt("resourceSize");
+		byte[] buffer = new byte[len];
+		int intent = 0;
+		while(true){
+			intent = input.read(buffer);  //intent saves resource chunk 
+				if(intent!=-1){
+					fileOut.write(buffer, 0, intent);
+				}
+				else 
+					break;
+		}
+		
 	}
 }

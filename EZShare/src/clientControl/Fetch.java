@@ -1,37 +1,18 @@
 package clientControl;
 
-import bean.ClientJSON;
+import bean.ResourceTemplate;
 import clientIO.Sender;
-import bean.*;
 import net.sf.json.JSONObject;
-
 
 public class Fetch {
 	
-	private ClientJSON fetchJson;
-	
-	public Fetch() {
-		fetchJson = new ClientJSON();
-	}
-
-	public void setCommand(String command) {
-		this.fetchJson.setCommand(command); 
-	}
-	
-	public void setResource(Resource resource) {
-		this.fetchJson.setResource(resource);
-	}
-	
-	public void sendRequest() {
-		JSONObject fetchItems = new JSONObject();
+	public void sendRequest(ResourceTemplate rt){
+		JSONObject jObject = new JSONObject();
+		jObject.put("command", "FETCH");
+		jObject.put("resourceTemplate", rt);
 		
-		fetchItems.put("command", fetchJson.getCommand());
-		fetchItems.put("resource", fetchJson.getResource());
-		
-
 		Sender sender = new Sender();
-		sender.sendRequest(fetchItems);
+		sender.sendRequest(jObject);
+		
 	}
 }
-
- 

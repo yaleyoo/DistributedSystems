@@ -16,22 +16,22 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+//		String[] arg1 ={"-a","steve","-debug"};
 		resourceList = new ArrayList<Resource>();
-		String[] arg1 ={"-a","steve"};
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
 		Options options = new Options();
-		//options(args,options);
-		options(arg1,options);
+		options(args,options);
+//		options(arg1,options);
 		
 		CommandLine commandLine = null;
 	    CommandLineParser parser = new DefaultParser();
 	    
 	    try {
 	    	//test
-	    	commandLine = parser.parse(options, arg1);
-	    	//commandLine = parser.parse(options, args);
+//	    	commandLine = parser.parse(options, arg1);
+	    	commandLine = parser.parse(options, args);
 	    	
 			if(commandLine.hasOption("h")){
 				HelpFormatter hf = new HelpFormatter();

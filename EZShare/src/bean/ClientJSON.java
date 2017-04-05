@@ -1,10 +1,9 @@
 package bean;
 
-
 public class ClientJSON {
 	private String command;
 	private Resource resource;
-	private String secret;
+	private String secrete;
 	private String relay;
 	private ResourceTemplate resourceTemplate;
 	private String[] serverList;
@@ -23,11 +22,11 @@ public class ClientJSON {
 	public void setResource(Resource resource) {
 		this.resource = resource;
 	}
-	public String getSecret() {
-		return secret;
+	public String getSecrete() {
+		return secrete;
 	}
-	public void setSecret(String secret) {
-		this.secret = secret;
+	public void setSecrete(String secrete) {
+		this.secrete = secrete;
 	}
 	public String getRelay() {
 		return relay;

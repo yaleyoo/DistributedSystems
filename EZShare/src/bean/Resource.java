@@ -2,57 +2,57 @@ package bean;
 
 
 
-public class Resource{
-	private String Name;
-	private String Description;
-	private String[] Tags;
-	private String URI;
-	private String Channel;
-	private String Owner;
-	private String EZserver;
+public class Resource {
+	private String name;
+	private String description;
+	private String[] tags;
+	private String uri;
+	private String channel;
+	private String owner;
+	private String ezserver;
 	
 	////////////getter&setter
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 	public String[] getTags() {
-		return Tags;
+		return tags;
 	}
 	public void setTags(String[] tags) {
-		Tags = tags;
+		this.tags = tags;
 	}
-	public String getURI() {
-		return URI;
+	public String geturi() {
+		return uri;
 	}
-	public void setURI(String uRI) {
-		URI = uRI;
+	public void seturi(String uRI) {
+		this.uri = uRI;
 	}
 	public String getChannel() {
-		return Channel;
+		return channel;
 	}
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channel = channel;
 	}
 	public String getOwner() {
-		return Owner;
+		return owner;
 	}
 	public void setOwner(String owner) {
-		Owner = owner;
+		this.owner = owner;
 	}
-	public String getEZserver() {
-		return EZserver;
+	public String getezserver() {
+		return ezserver;
 	}
-	public void setEZserver(String eZserver) {
-		EZserver = eZserver;
+	public void setezserver(String ezserver) {
+		this.ezserver = ezserver;
 	}
 	
 	

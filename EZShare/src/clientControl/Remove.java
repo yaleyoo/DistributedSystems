@@ -1,35 +1,16 @@
 package clientControl;
 
-import bean.ClientJSON;
+import bean.Resource;
 import clientIO.Sender;
-import bean.*;
 import net.sf.json.JSONObject;
 
-
 public class Remove {
-	
-	private ClientJSON removeJson;
-	
-	public Remove() {
-		removeJson = new ClientJSON();
-	}
-
-	public void setCommand(String command) {
-		this.removeJson.setCommand(command); 
-	}
-	
-	public void setResource(Resource resource) {
-		this.removeJson.setResource(resource);
-	}
-	
-	public void sendRequest() {
-		JSONObject removeItem = new JSONObject();
+	public void sendRequest(Resource resource){
+		JSONObject jObject = new JSONObject();
+		jObject.put("command", "REMOVE");
+		jObject.put("resource", resource);
 		
-		removeItem.put("command", removeJson.getCommand());
-		removeItem.put("resource", removeJson.getResource());
-		
-
 		Sender sender = new Sender();
-		sender.sendRequest(removeItem);
+		sender.sendRequest(jObject);
 	}
 }

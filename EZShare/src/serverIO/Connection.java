@@ -16,10 +16,12 @@ public class Connection extends Thread {
 	DataInputStream in;
 	DataOutputStream out;
 	Socket clientSocket;
+	Processor processor;
 	
 	public Connection(Socket aClientSocket){
 		try {
 			clientSocket = aClientSocket;
+			processor = new Processor();
 			in = new DataInputStream( clientSocket.getInputStream());
 			out =new DataOutputStream( clientSocket.getOutputStream());
 			this.start();
@@ -31,13 +33,12 @@ public class Connection extends Thread {
 		try { // an echo server
 			String data = in.readUTF(); // read a line of data from the stream
 			if(Debug.isDebug){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
-				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - receive data:"+data);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - RECEIVED:"+data);
 				}
-			Processor processor = new Processor();
 			processor.getClientJSON(JSONObject.fromObject(data));
-			JSONObject jObject = processor.assignRequest();
-			out.writeUTF(jObject.toString());
+			processor.assignRequest();
+			//out.writeUTF(data);
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {

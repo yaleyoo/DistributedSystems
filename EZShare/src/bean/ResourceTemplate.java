@@ -1,5 +1,5 @@
 package bean;
 
-public class ResourceTemplate {
+public class ResourceTemplate extends Resource{
 
 }

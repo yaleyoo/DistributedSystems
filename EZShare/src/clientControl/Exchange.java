@@ -35,15 +35,7 @@ public class Exchange {
 			value.add(exchangeItems);
 		}
 		
-		
-		exchangeItems.put("command", clientJSON.getCommand());
-		exchangeItems.put("serverList", value);
-		
-		//exchangeJson.setServerList((String[]) exchangeObj.get("serverList")); 
-		
 		Sender sender = new Sender();
 		sender.sendRequest(exchangeItems);
-		
-//		System.out.println(exchangeObj);
 	}
 }

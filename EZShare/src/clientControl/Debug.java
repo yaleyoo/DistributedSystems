@@ -8,7 +8,7 @@ public class Debug {
 	
 	public  void defineDebug(boolean flag){
 		isDebug = flag;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		System.out.println(sdf.format(new Date())+" - [EZShare.clientControl] - [INFO] - setDebug on");
 	}
 	
