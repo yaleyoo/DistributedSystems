@@ -5,9 +5,8 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
+import bean.ClientJSON;
 import net.sf.json.JSONObject;
 import processor.Processor;
 import serverControl.Debug;
@@ -16,12 +15,10 @@ public class Connection extends Thread {
 	DataInputStream in;
 	DataOutputStream out;
 	Socket clientSocket;
-	Processor processor;
 	
 	public Connection(Socket aClientSocket){
 		try {
 			clientSocket = aClientSocket;
-			processor = new Processor();
 			in = new DataInputStream( clientSocket.getInputStream());
 			out =new DataOutputStream( clientSocket.getOutputStream());
 			this.start();
@@ -32,14 +29,14 @@ public class Connection extends Thread {
 	public void run(){
 		try { // an echo server
 			String data = in.readUTF(); // read a line of data from the stream
-			if(Debug.isDebug){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
-				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - RECEIVED:"+data);
-				}
-			processor.getClientJSON(JSONObject.fromObject(data));
-			JSONObject jObject = processor.assignRequest();
-			out.writeUTF(jObject.toString());
-			//out.writeUTF(data);
+			
+			JSONObject dataJson = JSONObject.fromObject(data);
+			if(Debug.isDebug)
+				System.out.println("[EZShare.serverIO] - [FINE] - receive data:"+data);
+			Processor processor = new Processor();
+			processor.getClientJSON(dataJson);
+			JSONObject jsonObject = processor.assignRequest();
+			out.writeUTF(jsonObject.toString());
 			
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());
