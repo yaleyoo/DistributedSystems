@@ -37,8 +37,10 @@ public class Connection extends Thread {
 				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - RECEIVED:"+data);
 				}
 			processor.getClientJSON(JSONObject.fromObject(data));
-			processor.assignRequest();
+			JSONObject jObject = processor.assignRequest();
+			out.writeUTF(jObject.toString());
 			//out.writeUTF(data);
+			
 		}catch (EOFException e){
 			System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {

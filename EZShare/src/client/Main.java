@@ -1,6 +1,8 @@
 package client;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.cli.*;
 
@@ -113,13 +115,20 @@ public class Main {
 			if(commandLine.hasOption("exchange")){
 				//stub
 				String value = commandLine.getOptionValue("servers");
-				String[] serverLists = value.split(",");
+				System.out.println(value);
+				try{
+					String[] serverLists = value.split(",");
+					Exchange exchange = new Exchange();
+					exchange.setCommand("EXCHANGE");
+					exchange.setServerList(serverLists);
+					
+					exchange.sendRequest();
+				}catch(Exception e){
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+					System.out.println(sdf.format(new Date())+" - [EZShare.client] - [ERROR] - servers are missing");
+				}
 				
-				Exchange exchange = new Exchange();
-				exchange.setCommand("EXCHANGE");
-				exchange.setServerList(serverLists);
 				
-				exchange.sendRequest();
 			}
 			
 			if(commandLine.hasOption("fetch")){

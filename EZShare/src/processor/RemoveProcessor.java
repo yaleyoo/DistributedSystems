@@ -1,10 +1,13 @@
 package processor;
 
 import bean.ClientJSON;
+import net.sf.json.JSONObject;
 
 public class RemoveProcessor {
 
-	public void process(ClientJSON cJSON){
+	public JSONObject process(ClientJSON cJSON){
 		System.out.println("removeprocessor");
+		return new JSONObject();
+		
 	}
 }

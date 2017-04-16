@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 public class Sender {
 	public static InetAddress address=null;
 	public static int port=0;
+	int num_of_fetching_resource=0;
 	
 	public void sendRequest(JSONObject jObject){
 		Socket s = null;
@@ -54,6 +55,7 @@ public class Sender {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 				System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - sending request:"+jObject.toString());
 			}
+			
 			output.writeUTF(jObject.toString());
 			
 			
@@ -74,6 +76,8 @@ public class Sender {
 						
 					}catch(EOFException e){
 						isEndFlag = true;
+						
+						
 					}
 					catch(Exception e){
 						e.printStackTrace();
@@ -93,6 +97,11 @@ public class Sender {
 	}
 	
 	public void fetchResource(JSONObject fileJSON,DataInputStream input) throws IOException{
+		num_of_fetching_resource++;
+		if(Debug.isDebug){
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+			System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - Downloading resource");
+		}
 		String dir = fileJSON.getString("uri");
 		String[] list = dir.split("/");
 		//create file named as resource name&&&& save in current folder
@@ -109,8 +118,13 @@ public class Sender {
 				if(intent!=-1){
 					fileOut.write(buffer, 0, intent);
 				}
-				else 
+				else {
+					if(Debug.isDebug){
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+						System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - RECEIVED:{\"resultSize\":"+num_of_fetching_resource+"}");
+					}
 					break;
+				}
 		}
 		
 	}

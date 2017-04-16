@@ -30,10 +30,14 @@ public class Exchange {
 		
 		for (String serverList : serverLists) {
 			String[] server = serverList.split(":");
-			exchangeItems.put("hostname", server[0]);
-			exchangeItems.put("port", server[1]);
-			value.add(exchangeItems);
+			JSONObject temp = new JSONObject();
+			temp.put("hostname", server[0]);
+			temp.put("port", server[1]);
+			value.add(temp);
 		}
+		
+		exchangeItems.put("command",clientJSON.getCommand());
+		exchangeItems.put("serverList", value);
 		
 		Sender sender = new Sender();
 		sender.sendRequest(exchangeItems);

@@ -8,12 +8,13 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Resource re = new Resource();
-		re.setName("ssss");
-		re.setDescription("eeeee");
-		re.seturi("www.jkjkl.com.au");
 		
-		JSONObject o = JSONObject.fromObject(re);
-		System.out.println(o);
+		re.seturi("http://www.jkjkl.com.au");
+		
+		String s = re.geturi();
+		System.out.println(s);
+		s= s.replace("/", "\\/");
+		System.out.println(s);
 	}
 
 }
