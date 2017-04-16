@@ -1,5 +1,7 @@
 package processor;
 
+import java.util.List;
+
 import bean.ClientJSON;
 import bean.Resource;
 import net.sf.json.JSONObject;
@@ -7,57 +9,48 @@ import server.Main;
 
 public class PublishProcessor {
 
-	public JSONObject process(ClientJSON cJSON){
-		JSONObject jObject = new JSONObject();
+	public static JSONObject process(ClientJSON cJSON){
+		JSONObject response = new JSONObject();
+		
 		Resource resource = cJSON.getResource();
 		
-		if(resource==null){
-			jObject.put("response", "error");
-			jObject.put("erroMessage", "missing resource");
-			return jObject;
-		}
-		
-		else{
-			if(resource.geturi().equals("")){
-				jObject.put("response", "error");
-				jObject.put("erroMessage", "cannot publish resource");
-				return jObject;
+		List<Resource> resourceList = Main.resourceList;
+		if (resource == null) {
+			response.put("response", "error");
+			response.put("errorMessage", "missing resource");
+			return response;
+		} 
+		else {
+			if(resource.getOwner().equals("*")) {
+				response.put("response", "error");
+				response.put("errorMessage", "invalid resource");
+				return response;
 			}
-			if(resource.getOwner().equals("*")){
-				jObject.put("response", "error");
-				jObject.put("erroMessage", "invalid resource");
-				return jObject;
+			else if(resource.getURI().equals((""))) {
+				response.put("response", "error");
+				response.put("errorMessage", "cannot publish resource");
+				return response;
 			}
 			
-			int publish_flag = 0;//0---nothing has same uri&channel 1---has same uri&channel&owner 2---has same uri&channel,different owner
-			for(Resource r:Main.resourceList){
-				if(r.geturi().equals(resource.geturi())&&r.getChannel().equals(resource.getChannel())){
-					if(r.getOwner().equals(resource.getOwner())){
-						r = resource;
-						publish_flag = 1;
+			for (Resource aResource : resourceList) {
+				if(resource.getChannel().equals(aResource.getChannel()) && resource.getURI().equals(aResource.getURI())) {
+					if(!resource.getOwner().equals(aResource.getOwner())) {
+						response.put("response", "error");
+						response.put("response", "invalid resource");
+						return response;
 					}
-					else{
-						publish_flag = 2;
+					else {
+						aResource = resource;
+						response.put("response", "success");
+						return response;
 					}
 				}
 			}
-			if(publish_flag==1){
-				jObject.put("response", "success");
-				return jObject;
-			}
-			if(publish_flag==2){
-				jObject.put("response", "error");
-				jObject.put("erroMessage", "invalid resource");
-				return jObject;
-			}
-			if(publish_flag==0){
-				Main.resourceList.add(resource);
-				jObject.put("response", "success");
-				return jObject;
-			}
-			
 		}
-		return jObject;
-
+		
+		Main.resourceList.add(resource);
+		response.put("response", "success");
+		return response;
+		
 	}
 }
