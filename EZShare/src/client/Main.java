@@ -74,7 +74,8 @@ public class Main {
 			if(commandLine.hasOption("tags")){
 				//stub
 				String value = commandLine.getOptionValue("tags");
-				resource.setChannel(value);
+				String[] list = value.split(",");
+				resource.setTags(list);
 			}
 			
 			if(commandLine.hasOption("uri")){

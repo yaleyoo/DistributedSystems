@@ -26,30 +26,35 @@ public class PublishProcessor {
 				response.put("errorMessage", "invalid resource");
 				return response;
 			}
-			else if(resource.getURI().equals((""))) {
+			else if(resource.geturi().equals((""))) {
 				response.put("response", "error");
 				response.put("errorMessage", "cannot publish resource");
 				return response;
 			}
 			
+			int index = 0;
 			for (Resource aResource : resourceList) {
-				if(resource.getChannel().equals(aResource.getChannel()) && resource.getURI().equals(aResource.getURI())) {
+				if(resource.getChannel().equals(aResource.getChannel()) && resource.geturi().equals(aResource.geturi())) {
 					if(!resource.getOwner().equals(aResource.getOwner())) {
 						response.put("response", "error");
 						response.put("response", "invalid resource");
 						return response;
 					}
 					else {
-						aResource = resource;
+						resourceList.set(index, resource);
+//						aResource = resource;
 						response.put("response", "success");
+						
 						return response;
 					}
 				}
+				index++;
 			}
 		}
 		
 		Main.resourceList.add(resource);
 		response.put("response", "success");
+	
 		return response;
 		
 	}

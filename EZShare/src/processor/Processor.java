@@ -1,14 +1,22 @@
 package processor;
 
+import java.util.List;
+
 import bean.ClientJSON;
 import net.sf.json.JSONObject;
 
 public class Processor {
 	ClientJSON clientJSON;
 	
-	public void getClientJSON(JSONObject jObject){
+	public ClientJSON getClientJSON(JSONObject jObject){
 		clientJSON = (ClientJSON) JSONObject.toBean(jObject, ClientJSON.class);
+		return clientJSON;
+	}
+	
+	public List<JSONObject> assignQueryRequest(){
+		QueryProcessor qp = new QueryProcessor();
 		
+		return qp.process(clientJSON);
 	}
 	
 	public JSONObject assignRequest(){
@@ -19,19 +27,9 @@ public class Processor {
 			return ep.process(clientJSON);
 		}
 		
-		if(command.equals("FETCH")){
-			FetchProcessor fp = new FetchProcessor();
-			return fp.process(clientJSON);
-		}
-		
 		if(command.equals("PUBLISH")){
 			PublishProcessor pp = new PublishProcessor();
 			return pp.process(clientJSON);
-		}
-		
-		if(command.equals("QUERY")){
-			QueryProcessor qp = new QueryProcessor();
-			return qp.process(clientJSON);
 		}
 		
 		if(command.equals("REMOVE")){
