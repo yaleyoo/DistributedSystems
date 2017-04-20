@@ -76,8 +76,6 @@ public class Sender {
 						
 					}catch(EOFException e){
 						isEndFlag = true;
-						
-						
 					}
 					catch(Exception e){
 						e.printStackTrace();
@@ -117,6 +115,7 @@ public class Sender {
 			intent = input.read(buffer);  //intent saves resource chunk 
 				if(intent!=-1){
 					fileOut.write(buffer, 0, intent);
+					fileOut.flush();
 				}
 				else {
 					if(Debug.isDebug){

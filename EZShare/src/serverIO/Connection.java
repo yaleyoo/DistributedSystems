@@ -10,7 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 import bean.ClientJSON;
+import bean.Resource;
 import net.sf.json.JSONObject;
+import processor.FetchProcessor;
 import processor.Processor;
 import serverControl.Debug;
 
@@ -38,7 +40,15 @@ public class Connection extends Thread {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 				System.out.println(sdf.format(new Date())+" - [EZShare.serverIO] - [FINE] - RECEIVED:"+data);
 				}
-			ClientJSON clientJSON = processor.getClientJSON(JSONObject.fromObject(data));
+			JSONObject jsonObject = JSONObject.fromObject(data);
+			/*
+			 * exchange response
+			 * */
+			if(jsonObject.has("response")){
+				throw new Exception();// receive response from other servers;
+			}
+			
+			ClientJSON clientJSON = processor.getClientJSON(jsonObject);
 			/*
 			 * query reply
 			 * */
@@ -53,7 +63,23 @@ public class Connection extends Thread {
 			 * fetch reply
 			 * */
 			else if(clientJSON.getCommand().equals("FETCH")){
-				
+				List<JSONObject> list = processor.assignFetchRequest();
+				/*
+				 * FETCH command with sending resource
+				 * */
+				if(list.get(0).has("type")){
+					Resource resource = (Resource) JSONObject.toBean(list.get(0).getJSONObject("resource"), Resource.class);
+					FetchProcessor.sendingResource(resource, out);
+				}
+				else{
+					/*
+					 * 
+					 * FETCH command without sending resource
+					 * */
+					for(int i=0;i<list.size();i++){
+						out.writeUTF(list.get(i).toString());
+					}
+				}
 			}
 			
 			else{
@@ -66,10 +92,14 @@ public class Connection extends Thread {
 			System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {
 			System.out.println("readline:"+e.getMessage());
-		} finally{
+		}catch(Exception e){
+			
+		}
+		finally{
 			try {
 				clientSocket.close();
 			}catch (IOException e){/*close failed*/}
 			}
 	}
+	
 }

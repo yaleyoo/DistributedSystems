@@ -10,7 +10,7 @@ import serverControl.Secret;
 
 public class ShareProcessor {
 
-	public static JSONObject process(ClientJSON cJSON){
+	public  JSONObject process(ClientJSON cJSON){
 		JSONObject response = new JSONObject();
 		
 		Resource resource = cJSON.getResource();
@@ -27,7 +27,7 @@ public class ShareProcessor {
 				response.put("errorMessage", "invalid resource");
 				return response;
 			}
-			else if(resource.getURI().equals((""))) {
+			else if(resource.geturi().equals((""))) {
 				response.put("response", "error");
 				response.put("errorMessage", "cannot share resource");
 				return response;
@@ -39,7 +39,7 @@ public class ShareProcessor {
 			}
 			
 			for (Resource aResource : resourceList) {
-				if(resource.getChannel().equals(aResource.getChannel()) && resource.getURI().equals(aResource.getURI())) {
+				if(resource.getChannel().equals(aResource.getChannel()) && resource.geturi().equals(aResource.geturi())) {
 					if(!resource.getOwner().equals(aResource.getOwner())) {
 						response.put("response", "error");
 						response.put("response", "invalid resource");

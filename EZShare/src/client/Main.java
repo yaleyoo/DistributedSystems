@@ -17,17 +17,14 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-//		String[] arg1 = {"-remove","-name","aaa","-debug"};
 		resource = new ResourceTemplate();
 		Options options = new Options();
 		options(args,options);
-//		options(arg1,options);
 		CommandLine commandLine = null;
 	    CommandLineParser parser = new DefaultParser();
 	    
 	    try {
 	    	commandLine = parser.parse(options, args);
-//			commandLine = parser.parse(options, arg1);
 			
 			if(commandLine.hasOption("help")){
 				HelpFormatter hf = new HelpFormatter();
@@ -116,7 +113,6 @@ public class Main {
 			if(commandLine.hasOption("exchange")){
 				//stub
 				String value = commandLine.getOptionValue("servers");
-				System.out.println(value);
 				try{
 					String[] serverLists = value.split(",");
 					Exchange exchange = new Exchange();

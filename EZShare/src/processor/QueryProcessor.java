@@ -16,6 +16,7 @@ public class QueryProcessor {
 	List<Resource> match_List = new ArrayList<Resource>();
 	List<JSONObject> response_List = new ArrayList<JSONObject>();
 
+	@SuppressWarnings("unchecked")
 	public List<JSONObject> process(ClientJSON cJSON){
 		JSONObject jObject = new JSONObject();
 		ResourceTemplate rt = cJSON.getResourceTemplate();

@@ -2,22 +2,27 @@ package server;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import org.apache.commons.cli.*;
 
 import bean.Resource;
 import serverControl.*;
+import serverIO.ExchangeSender;
 import serverIO.Listener;
 
 public class Main {
 	//public  static List<Resource> resourceList;
 	/*Using Vector to store resource*/
 	public static Vector<Resource> resourceList;
+	public static Vector<String> serverList;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		resourceList = new Vector<Resource>();
+		serverList = new Vector<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
@@ -150,6 +155,23 @@ public class Main {
 //		port.bindtoPort();
 
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - started");
+		
+		Timer timer = new Timer();
+		/*
+		 * exchange per 10 mins
+		 * */
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(Main.serverList.size()!=0){
+					ExchangeSender eSender = new ExchangeSender();
+					eSender.send();
+				}
+			}
+		}, 0,600000);
+		
 		Listener listener = new Listener();
 		listener.listening();
 		

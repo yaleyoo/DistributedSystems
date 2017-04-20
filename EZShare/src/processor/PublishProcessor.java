@@ -6,10 +6,11 @@ import bean.ClientJSON;
 import bean.Resource;
 import net.sf.json.JSONObject;
 import server.Main;
+import serverControl.AdvertiseHost;
 
 public class PublishProcessor {
 
-	public static JSONObject process(ClientJSON cJSON){
+	public JSONObject process(ClientJSON cJSON){
 		JSONObject response = new JSONObject();
 		
 		Resource resource = cJSON.getResource();
@@ -26,30 +27,37 @@ public class PublishProcessor {
 				response.put("errorMessage", "invalid resource");
 				return response;
 			}
-			else if(resource.getURI().equals((""))) {
+			else if(resource.geturi().equals((""))) {
 				response.put("response", "error");
 				response.put("errorMessage", "cannot publish resource");
 				return response;
 			}
 			
+			int index = 0;
 			for (Resource aResource : resourceList) {
-				if(resource.getChannel().equals(aResource.getChannel()) && resource.getURI().equals(aResource.getURI())) {
+				if(resource.getChannel().equals(aResource.getChannel()) && resource.geturi().equals(aResource.geturi())) {
 					if(!resource.getOwner().equals(aResource.getOwner())) {
 						response.put("response", "error");
 						response.put("response", "invalid resource");
 						return response;
 					}
 					else {
-						aResource = resource;
+						resource.setezserver(AdvertiseHost.advertiseHost);
+						resourceList.set(index, resource);
+//						aResource = resource;
 						response.put("response", "success");
+						
 						return response;
 					}
 				}
+				index++;
 			}
 		}
 		
+		resource.setezserver(AdvertiseHost.advertiseHost);
 		Main.resourceList.add(resource);
 		response.put("response", "success");
+	
 		return response;
 		
 	}
