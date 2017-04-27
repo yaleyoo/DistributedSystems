@@ -8,7 +8,6 @@ public class RemoveProcessor {
 
 	public JSONObject process(ClientJSON cJSON)
 	{
-		System.out.println("removeprocessor");
 		
 		JSONObject removeStatus = new JSONObject();
 		
@@ -33,7 +32,7 @@ public class RemoveProcessor {
 				if(Main.resourceList.get(i).getOwner().equals(resource.getOwner()) && Main.resourceList.get(i).getChannel().equals(resource.getChannel()) && Main.resourceList.get(i).geturi().equals(resource.geturi()))
 				{
 					found = true;
-					Resource resourceStored = Main.resourceList.get(i);
+//					Resource resourceStored = Main.resourceList.get(i);
 					Main.resourceList.remove(i);
 					removeStatus.put("response", "success");
 					System.out.println(removeStatus);
@@ -49,4 +48,3 @@ public class RemoveProcessor {
 		return removeStatus;
 	}
 }
-

@@ -23,8 +23,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		resourceList = new Vector<Resource>();
 		serverList = new Vector<String>();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
 		Options options = new Options();
 		options(args,options);

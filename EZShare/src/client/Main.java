@@ -101,7 +101,7 @@ public class Main {
 
 			if(commandLine.hasOption("secret")){
 				//stub
-				String value = commandLine.getOptionValue("port");
+				String value = commandLine.getOptionValue("secret");
 				Secret.secret = value;
 			}
 
