@@ -1,41 +1,52 @@
 package processor;
-import bean.ClientJSON;
 import bean.Resource;
+import bean.ClientJSON;
 import net.sf.json.JSONObject;
 import server.Main;
 
 public class RemoveProcessor {
-	
-	public JSONObject process(ClientJSON removeMatch){
-		JSONObject jObject = new JSONObject();
-		Resource resource = removeMatch.getResource();
+
+	public JSONObject process(ClientJSON cJSON)
+	{
+		System.out.println("removeprocessor");
 		
-		if(resource == null){
-			jObject.put("responce", "error");
-			jObject.put("errorMessage","missing resource");
+		JSONObject removeStatus = new JSONObject();
+		
+		Resource resource = cJSON.getResource();
+		
+		for(int i = 0; i < Main.resourceList.size(); i++)
+		{
+			boolean found = false;
 			
-			return jObject;
-		}
-		else{
-			boolean is_exist = false;
-			for(int i = 0; i < Main.resourceList.size(); i++){
-				if(Main.resourceList.get(i).getOwner().equals(resource.getOwner()) 
-						&& Main.resourceList.get(i).getChannel().equals(resource.getChannel())
-							&& Main.resourceList.get(i).geturi().equals(resource.geturi())){
-					//Resource resourceStored = Main.resourceList.get(i);
-					Main.resourceList.remove(i);
-					
-				}
+			if(resource == null)
+			{
+				removeStatus.put("response", "error");
+				removeStatus.put("errorMessage",  "missing resource");
 			}
-			if(is_exist){
-				jObject.put("responce", "success");
-				return jObject;
+			else if(resource.getOwner() == null || resource.getChannel() == null || resource.geturi() == null || resource.getDescription() == null || resource.getName() == null || resource.getezserver() == null || resource.getTags() == null)
+			{
+				removeStatus.put("response", "error");
+				removeStatus.put("errorMessage",  "invalid resource");
 			}
+			
 			else{
-				jObject.put("response", "error");
-				jObject.put("errorMessage", "resource not found");
-				return jObject;
+				if(Main.resourceList.get(i).getOwner().equals(resource.getOwner()) && Main.resourceList.get(i).getChannel().equals(resource.getChannel()) && Main.resourceList.get(i).geturi().equals(resource.geturi()))
+				{
+					found = true;
+					Resource resourceStored = Main.resourceList.get(i);
+					Main.resourceList.remove(i);
+					removeStatus.put("response", "success");
+					System.out.println(removeStatus);
+				}
+				if(found == false)
+				{
+					removeStatus.put("response", "error");
+					removeStatus.put("errorMessage", "cannot remove resource");
+				}
+				
 			}
 		}
+		return removeStatus;
 	}
 }
+
