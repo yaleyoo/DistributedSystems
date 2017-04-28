@@ -108,6 +108,8 @@ public class Main {
 				}
 			}
 			
+			
+			
 			if(commandLine.hasOption("s")){
 
 				String value = commandLine.getOptionValue("s");
@@ -210,7 +212,6 @@ public class Main {
 	     Option opt6 = new Option("d","debug",false,"print debug information");
 	     opt.setRequired(false);
 	     options.addOption(opt6);
-	     
 	     
 	}
 

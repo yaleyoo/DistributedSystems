@@ -8,7 +8,7 @@ public class Query {
 	public void sendRequest(ResourceTemplate rt){
 		JSONObject jObject = new JSONObject();
 		jObject.put("command", "QUERY");
-		jObject.put("relay", true);
+		jObject.put("relay", Relay.is_relay);
 		jObject.put("resourceTemplate", rt);
 		
 		Sender sender = new Sender();

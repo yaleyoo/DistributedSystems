@@ -32,6 +32,13 @@ public class Main {
 			    hf.printHelp("Command Help", options, true);
 			}
 			
+			if(commandLine.hasOption("relay")){
+				String value = commandLine.getOptionValue("relay");
+				if(value.equals("false")){
+					Relay.is_relay=false;
+				}
+			}
+			
 			if(commandLine.hasOption("debug")){
 				//stub
 				Debug.isDebug = true;
@@ -253,6 +260,10 @@ public class Main {
 	     Option opt18 = new Option("ezServer",true,"resource server");
 	     opt.setRequired(false);
 	     options.addOption(opt18);
+	     
+	     Option opt19 = new Option("relay",true,"relay parameter of query command");
+	     opt.setRequired(false);
+	     options.addOption(opt19);
 	}
 
 }

@@ -17,7 +17,7 @@ public class ExchangeSender {
 			/*
 			 * select a random server to exchange
 			 * */
-			int index = (int)(Math.random()*10)%Main.serverList.size();
+			int index = (int)(Math.random()*Main.serverList.size());
 			String destination = Main.serverList.get(index);
 			String[] list = destination.split(":");
 			InetAddress address = InetAddress.getByName(list[0]);
