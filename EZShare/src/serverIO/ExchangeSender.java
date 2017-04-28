@@ -2,11 +2,8 @@ package serverIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

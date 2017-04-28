@@ -36,7 +36,7 @@ public class FetchProcessor {
 		 * */
 		if(!is_channel||!is_uri){
 			jObject.put("response", "error");
-			jObject.put("errorMessage", "invalid resourceTemplate");
+			jObject.put("errorMessage", "nothing match resourceTemplate");
 			response_list.add(jObject);
 			jObject = new JSONObject();//clear json
 			
@@ -79,6 +79,7 @@ public class FetchProcessor {
 		int intent = 0;
 		
 		try {
+			uri = uri.replaceAll("file://", "");
 			File file = new File(uri);
 			
 			jObject.put("response", "success");
