@@ -172,7 +172,7 @@ public class Main {
 					eSender.send();
 				}
 			}
-		}, 0,600000);
+		}, 0,600000);//10mins
 		
 		Listener listener = new Listener();
 		listener.listening();

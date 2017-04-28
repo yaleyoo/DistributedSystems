@@ -26,6 +26,8 @@ public class ExchangeProcessor {
 			return jObject;
 		}
 		
+		System.out.println("+++"+Main.serverList.size());
+		
 		JSONObject jObject = new JSONObject();
 		jObject.put("response", "success");
 		return jObject;
