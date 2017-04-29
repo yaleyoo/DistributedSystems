@@ -155,9 +155,6 @@ public class QueryProcessor {
 				if(num%3==0){
 					future1 = pool.submit(qs);
 					if(num==size-1){
-//						while(!future1.isDone()){
-//							//waiting
-//						}
 						try {
 							match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
 							System.out.println(match_List.size());
@@ -176,9 +173,6 @@ public class QueryProcessor {
 				else if(num%3==1){
 					future2 = pool.submit(qs);
 					if(num==size-1){
-//						while(!future1.isDone()||!future2.isDone()){
-//							//waiting
-//						}
 						try {
 							match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
 							match_List.addAll((List<Resource>) future2.get(5,TimeUnit.SECONDS));
@@ -196,9 +190,6 @@ public class QueryProcessor {
 				}
 				else if(num%3==2){
 					future3 = pool.submit(qs);
-//					while(!future1.isDone()||!future2.isDone()||!future3.isDone()){
-//						//waiting
-//					}
 					try {
 						match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
 						match_List.addAll((List<Resource>) future2.get(5,TimeUnit.SECONDS));

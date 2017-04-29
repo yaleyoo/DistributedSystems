@@ -109,7 +109,7 @@ public class Sender {
 		FileOutputStream fileOut = new FileOutputStream(file);
 		
 		int len = fileJSON.getInt("resourceSize");
-		byte[] buffer = new byte[1024*1024];
+		byte[] buffer = new byte[len];
 		int intent = 0;
 		while(true){
 			intent = input.read(buffer);  //intent saves resource chunk 
