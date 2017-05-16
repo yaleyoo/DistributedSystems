@@ -11,6 +11,9 @@ public class ExchangeProcessor {
 		String[] serverList = cJSON.getServerList();
 		for(String s:serverList){
 			boolean is_exist=false;
+			/*
+			 * secure issue modify here 
+			 * */
 			for(String k:Main.serverList){
 				if(k.equals(s))
 					is_exist = true;

@@ -137,6 +137,11 @@ public class QueryProcessor {
 				}
 			}
 		}
+		/*
+		 * 
+		 * relay
+		 * 
+		 * */
 		
 		if(cJSON.getRelay().equals("true")){
 			ExecutorService pool = Executors.newCachedThreadPool(); 
@@ -146,10 +151,16 @@ public class QueryProcessor {
 			Future<Object> future1 = null; 
 			Future<Object> future2 = null;
 			Future<Object> future3 = null; 
+			/*
+			 * modify
+			 * */
 			for(String server: Main.serverList){
 				String[] s = server.split(":");
 				String address = s[0];
 				int port = Integer.valueOf(s[1]);
+				/*
+				 * secure issue modify here
+				 * */
 				Callable<Object> qs = new QuerySender(address, port,cJSON);
 				
 				if(num%3==0){
@@ -157,7 +168,6 @@ public class QueryProcessor {
 					if(num==size-1){
 						try {
 							match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
-							System.out.println(match_List.size());
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
