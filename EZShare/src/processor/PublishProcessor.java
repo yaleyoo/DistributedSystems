@@ -1,5 +1,6 @@
 package processor;
 
+import java.io.IOException;
 import java.util.List;
 
 import bean.ClientJSON;
@@ -10,7 +11,7 @@ import serverControl.AdvertiseHost;
 
 public class PublishProcessor {
 
-	public JSONObject process(ClientJSON cJSON){
+	public JSONObject process(ClientJSON cJSON) throws IOException{
 		JSONObject response = new JSONObject();
 		
 		Resource resource = cJSON.getResource();
@@ -55,7 +56,7 @@ public class PublishProcessor {
 		}
 		
 		resource.setezserver(AdvertiseHost.advertiseHost);
-		Main.resourceList.add(resource);
+		Main.addResource(resource);
 		response.put("response", "success");
 	
 		return response;

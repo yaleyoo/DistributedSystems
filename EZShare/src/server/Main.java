@@ -1,7 +1,10 @@
 package server;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -9,6 +12,7 @@ import java.util.Vector;
 import org.apache.commons.cli.*;
 
 import bean.Resource;
+import processor.SubscribeProcessor;
 import serverControl.*;
 import serverIO.ExchangeSender;
 import serverIO.Listener;
@@ -18,11 +22,14 @@ public class Main {
 	/*Using Vector to store resource*/
 	public static Vector<Resource> resourceList;
 	public static Vector<String> serverList;
+	public static List<SubscribeProcessor> observerList;
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		resourceList = new Vector<Resource>();
 		serverList = new Vector<String>();
+		observerList = new ArrayList<SubscribeProcessor>();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
@@ -213,6 +220,28 @@ public class Main {
 	     opt.setRequired(false);
 	     options.addOption(opt6);
 	     
+	}
+	
+	
+	public static void addResource(Resource e) throws IOException {
+		resourceList.add(e);
+		notifyObservers(e);
+	}
+	
+	
+	
+	public static void register(SubscribeProcessor sub){
+		observerList.add(sub);
+	}
+	
+	public static void unregister(SubscribeProcessor sub){
+		observerList.remove(sub);
+	}
+	
+	public static void notifyObservers(Resource e) throws IOException{
+		for(SubscribeProcessor observer : observerList){
+	           observer.update((Resource) e);
+	       }
 	}
 
 }

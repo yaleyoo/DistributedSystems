@@ -226,7 +226,6 @@ public class QueryProcessor {
 		 * genarate the List of Response
 		 * 
 		 * */
-		
 		match_num = match_List.size();
 		jObject.put("response", "success");
 		response_List.add(jObject);

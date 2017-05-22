@@ -1,5 +1,7 @@
 package processor;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +42,17 @@ public class Processor {
 		return qp.process(clientJSON);
 	}
 	
+	public void assignSubscribeRequest(SubscribeProcessor subp, DataOutputStream out) throws IOException{
+		
+		subp.process(clientJSON, out);
+	}
+	
 	public List<JSONObject> assignFetchRequest(){
 		FetchProcessor fp = new FetchProcessor();
 		return fp.process(clientJSON);
 	}
 	
-	public JSONObject assignRequest(){
+	public JSONObject assignRequest() throws IOException{
 		String command = clientJSON.getCommand();
 		
 		if(command.equals("EXCHANGE")){
@@ -67,6 +74,7 @@ public class Processor {
 			ShareProcessor sp = new ShareProcessor();
 			return sp.process(clientJSON);
 		}
+		
 		
 		else{
 			JSONObject jObject = new JSONObject();

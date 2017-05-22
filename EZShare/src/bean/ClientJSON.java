@@ -5,6 +5,7 @@ public class ClientJSON {
 	private Resource resource;
 	private String secret;
 	private String relay;
+	private String id;
 	private ResourceTemplate resourceTemplate;
 	private String[] serverList;
 	
@@ -45,6 +46,12 @@ public class ClientJSON {
 	}
 	public void setServerList(String[] serverList) {
 		this.serverList = serverList;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

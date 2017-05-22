@@ -1,5 +1,6 @@
 package clientIO;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -10,8 +11,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 import clientControl.Debug;
+import clientControl.Subscribe;
 import net.sf.json.JSONObject;
 
 public class Sender {
@@ -32,6 +35,8 @@ public class Sender {
 				port = 3780;
 			}
 			s = new Socket(address,port);
+			
+			
 			if(Debug.isDebug){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 				System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - connection established");
@@ -39,17 +44,6 @@ public class Sender {
 			DataInputStream input = new DataInputStream(s.getInputStream());
 			DataOutputStream output = new DataOutputStream(s.getOutputStream());
 			
-			///transfer ClientJSON to JSONObject
-//			JsonConfig config = new JsonConfig();  
-//			config.setJsonPropertyFilter(new PropertyFilter()  
-//			{  
-//			    @Override  
-//			    public boolean apply(Object source, String name, Object value)  
-//			    {  
-//			        return value == null;  
-//			    }  
-//			}); 
-//			JSONObject jObject = JSONObject.fromObject(clientJSON,config);
 			
 			if(Debug.isDebug){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
@@ -62,24 +56,70 @@ public class Sender {
 			//receive replys
 			boolean isEndFlag = false;
 			
-			while(!isEndFlag){
+			if(!Subscribe.is_subscribe){
+				while(!isEndFlag){
+					try{
+							String reply = input.readUTF();
+							
+							
+							if(Debug.isDebug){
+								SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+								System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - RECEIVED:"+reply);
+							}
+							JSONObject fileJSON = JSONObject.fromObject(reply);
+							if(fileJSON.has("resourceSize")){
+								fetchResource(fileJSON, input);
+							}
+							
+						}catch(EOFException e){
+							isEndFlag = true;
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+				}
+			}
+			else{//Subscribing
+				Thread t = new Thread(){
+					@SuppressWarnings("resource")
+					public void run(){
+						Scanner scanner = new Scanner(System.in);
+						boolean flag = true;
+						while(flag){
+							String s = scanner.nextLine();
+							if(s.equals("")){
+								Subscribe.is_subscribe = false;
+								JSONObject jObject = new JSONObject();
+								jObject.put("command", "UNSUBSCRIBE");
+								jObject.put("id", Subscribe.id);
+								sendRequest(jObject);
+								
+								flag = false;
+							}
+						}
+					}
+				};
+				t.start();
+				
+				while(Subscribe.is_subscribe){
 					try{
 						String reply = input.readUTF();
+							
 						if(Debug.isDebug){
 							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 							System.out.println(sdf.format(new Date())+" - [EZShare.clientIO] - [INFO] - RECEIVED:"+reply);
 						}
-						JSONObject fileJSON = JSONObject.fromObject(reply);
-						if(fileJSON.has("resourceSize")){
-							fetchResource(fileJSON, input);
-						}
 						
-					}catch(EOFException e){
-						isEndFlag = true;
+							
+					}
+					catch(EOFException e){
+						
 					}
 					catch(Exception e){
 						e.printStackTrace();
 					}
+					
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();

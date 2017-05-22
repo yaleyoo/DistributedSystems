@@ -115,6 +115,12 @@ public class Main {
 			if(commandLine.hasOption("servers")){
 				//stub
 			}
+			
+			if(commandLine.hasOption("id")){
+				//stub
+				String value = commandLine.getOptionValue("id");
+				Subscribe.id = value;
+			}
 			////////functional commands
 
 			if(commandLine.hasOption("exchange")){
@@ -169,8 +175,28 @@ public class Main {
 			if(commandLine.hasOption("share")){
 				//stub
 				Share share = new Share();
+				if(!commandLine.hasOption("secret")){
+					if(Debug.isDebug){
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+						System.out.println(sdf.format(new Date())+" - [EZShare.client] - [Error] - missing secret");
+					}
+					return;
+				}
 				share.sendRequest(Secret.secret, resource);
 				
+			}
+			
+			if(commandLine.hasOption("subscribe")){
+				if(commandLine.getOptionValue("id")==null){
+					if(Debug.isDebug){
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+						System.out.println(sdf.format(new Date())+" - [EZShare.client] - [Error] - missing id");
+					}
+					return;
+				}
+				Subscribe subscribe = new Subscribe();
+				Subscribe.is_subscribe = true;
+				subscribe.sendRequest(resource);
 			}
 			
 			
@@ -264,6 +290,14 @@ public class Main {
 	     Option opt19 = new Option("relay",true,"relay parameter of query command");
 	     opt.setRequired(false);
 	     options.addOption(opt19);
+	     
+	     Option opt20 = new Option("subscribe",false,"subscribe a server and update resource");
+	     opt.setRequired(false);
+	     options.addOption(opt20);
+	     
+	     Option opt21 = new Option("id",true,"the id of your subscribe command");
+	     opt.setRequired(false);
+	     options.addOption(opt21);
 	}
 
 }

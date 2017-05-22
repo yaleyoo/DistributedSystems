@@ -1,5 +1,6 @@
 package processor;
 
+import java.io.IOException;
 import java.util.List;
 
 import bean.ClientJSON;
@@ -10,7 +11,7 @@ import serverControl.Secret;
 
 public class ShareProcessor {
 
-	public  JSONObject process(ClientJSON cJSON){
+	public  JSONObject process(ClientJSON cJSON) throws IOException{
 		JSONObject response = new JSONObject();
 		
 		Resource resource = cJSON.getResource();
@@ -30,6 +31,12 @@ public class ShareProcessor {
 			else if(resource.geturi().equals((""))) {
 				response.put("response", "error");
 				response.put("errorMessage", "cannot share resource");
+				return response;
+			}
+			
+			else if(cJSON.getSecret()==null){
+				response.put("response", "error");
+				response.put("errorMessage", "missing secret");
 				return response;
 			}
 			
@@ -59,7 +66,7 @@ public class ShareProcessor {
 				}
 				
 				if(!is_exist_flag){
-					Main.resourceList.add(resource);
+					Main.addResource(resource);
 					response.put("response", "success");
 					return response;
 				}

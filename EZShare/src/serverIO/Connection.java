@@ -14,6 +14,8 @@ import bean.Resource;
 import net.sf.json.JSONObject;
 import processor.FetchProcessor;
 import processor.Processor;
+import processor.SubscribeProcessor;
+import server.Main;
 import serverControl.Debug;
 
 public class Connection extends Thread {
@@ -57,6 +59,25 @@ public class Connection extends Thread {
 				for(int i=0;i<list.size();i++){
 					out.writeUTF(list.get(i).toString());
 				}
+				
+			}
+			/*
+			 * Subscribe reply
+			 * */
+			else if(clientJSON.getCommand().equals("SUBSCRIBE")){
+				SubscribeProcessor sub = new SubscribeProcessor();
+				sub.is_subscribe = true;
+				Main.register(sub);
+				processor.assignSubscribeRequest(sub, out);
+			}
+			else if(clientJSON.getCommand().equals("UNSUBSCRIBE")){
+				String id = clientJSON.getId();
+				SubscribeProcessor sub = null;
+				for(SubscribeProcessor tempSub:Main.observerList){
+					if(tempSub.id.equals(id))
+						sub = tempSub;
+				}
+				sub.is_subscribe = false;
 				
 			}
 			/*
