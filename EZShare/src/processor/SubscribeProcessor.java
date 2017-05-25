@@ -28,8 +28,10 @@ public class SubscribeProcessor {
 	boolean is_owner = false;
 	boolean is_name = false;
 	DataOutputStream out = null;
+	public ClientJSON cJSON;
 	
 	public void process(ClientJSON cJSON, DataOutputStream out) throws IOException{
+		this.cJSON = cJSON;
 		JSONObject jObject = new JSONObject();
 		rt = cJSON.getResourceTemplate();
 		this.out = out;
