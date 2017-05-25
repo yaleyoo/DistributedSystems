@@ -11,11 +11,13 @@ import java.util.Vector;
 
 import org.apache.commons.cli.*;
 
+import bean.ClientJSON;
 import bean.Resource;
 import processor.SubscribeProcessor;
 import serverControl.*;
 import serverIO.ExchangeSender;
 import serverIO.Listener;
+import serverIO.SubscribeSender;
 
 public class Main {
 	//public  static List<Resource> resourceList;
@@ -222,13 +224,31 @@ public class Main {
 	     
 	}
 	
+	public static void addServerList(String server) {
+		serverList.add(server);
+		if(!observerList.isEmpty()) {
+			for(SubscribeProcessor sub : observerList) {
+				ClientJSON cJSON = sub.cJSON;
+				if(cJSON.getRelay().equals("true")) {
+					String id = cJSON.getId();
+					
+					cJSON = new ClientJSON();
+					cJSON.setCommand("UNSUBSCRIBE");
+					cJSON.setId(id);
+					
+					String[] s = server.split(":");
+					String address = s[0];
+					int port = Integer.valueOf(s[1]);
+					new SubscribeSender(address,port,cJSON);
+				}
+			}
+		}
+	}
 	
 	public static void addResource(Resource e) throws IOException {
 		resourceList.add(e);
 		notifyObservers(e);
 	}
-	
-	
 	
 	public static void register(SubscribeProcessor sub){
 		observerList.add(sub);
@@ -245,3 +265,4 @@ public class Main {
 	}
 
 }
+
