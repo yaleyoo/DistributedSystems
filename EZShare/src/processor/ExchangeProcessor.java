@@ -19,7 +19,8 @@ public class ExchangeProcessor {
 					is_exist = true;
 			}
 			if(!is_exist)
-			Main.serverList.add(s);
+				Main.addServerList(s);
+			//Main.serverList.add(s);
 		}
 		
 		if(serverList.length==0){
@@ -35,3 +36,4 @@ public class ExchangeProcessor {
 		return jObject;
 	}
 }
+
