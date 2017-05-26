@@ -25,13 +25,16 @@ public class Main {
 	public static Vector<Resource> resourceList;
 	public static Vector<String> serverList;
 	public static List<SubscribeProcessor> observerList;
+	public static Vector<String> secureServerList;
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		resourceList = new Vector<Resource>();
 		serverList = new Vector<String>();
+		secureServerList = new Vector<String>();//secure
 		observerList = new ArrayList<SubscribeProcessor>();
+		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - Starting the EZShare Server");
@@ -40,6 +43,7 @@ public class Main {
 		
 		CommandLine commandLine = null;
 	    CommandLineParser parser = new DefaultParser();
+	    Port port = new Port();// initialize object port
 	    
 	    try {
 	    	commandLine = parser.parse(options, args);
@@ -54,6 +58,8 @@ public class Main {
 				String value = commandLine.getOptionValue("a");
 				if(value==null){// command without arg   ERR
 					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'advertisedhost' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
 				}
 				else{// command with arg 
 					AdvertiseHost aHost = new AdvertiseHost();
@@ -65,6 +71,8 @@ public class Main {
 				String value = commandLine.getOptionValue("c");
 				if(value==null){// command without arg   ERR
 					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
 				}
 				else{// command with arg 
 					if(Kits.isNumeric(value)){// arg is number
@@ -74,6 +82,8 @@ public class Main {
 					}
 					else{//arg is not number
 						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
+						System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+						return;
 					}
 				}
 			
@@ -83,6 +93,8 @@ public class Main {
 				String value = commandLine.getOptionValue("e");
 				if(value==null){// command without arg   ERR
 					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'exchangeinterval' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
 				}
 				else{// command with arg 
 					if(Kits.isNumeric(value)){// arg is number
@@ -91,6 +103,8 @@ public class Main {
 					}
 					else{//arg is not number
 						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'connectionintervallimit' should have numberic arg");
+						System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+						return;
 					}
 				}
 			}
@@ -100,19 +114,23 @@ public class Main {
 				debug.defineDebug(true);
 			}
 			
-			if(commandLine.hasOption("p")){
+			if (commandLine.hasOption("p")) {
 				String value = commandLine.getOptionValue("p");
-				if(value==null){// command without arg   ERR
-					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'port' should have arg");
-				}
-				else{// command with arg 
-					if(Kits.isNumeric(value)){// arg is number
-						Port p = new Port();
-						int port = Integer.parseInt(value);
-						p.bindtoPort(port);
-					}
-					else{//arg is not number
-						System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'port' should have integer arg");
+				if (value == null) {// command without arg ERR
+					System.out.println(
+							sdf.format(new Date()) + " - [EZShare.server] - [Error] - Command 'port' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
+				} else {// command with arg
+					if (Kits.isNumeric(value)) {// arg is number
+						// Port p = new Port();
+						int portInt = Integer.parseInt(value);
+						port.bindtoPort(portInt);
+					} else {// arg is not number
+						System.out.println(sdf.format(new Date())
+								+ " - [EZShare.server] - [Error] - Command 'port' should have integer arg");
+						System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+						return;
 					}
 				}
 			}
@@ -124,6 +142,8 @@ public class Main {
 				String value = commandLine.getOptionValue("s");
 				if(value==null){// command without arg   ERR
 					System.out.println(sdf.format(new Date())+" - [EZShare.server] - [Error] - Command 'secret' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
 				}
 				else{// command with arg 
 					Secret secret = new Secret();
@@ -131,6 +151,38 @@ public class Main {
 				}
 			
 			}
+			
+			// ------------------------------securePort----------------------------------------------//
+
+			if (commandLine.hasOption("sport") && (commandLine.hasOption("p") || commandLine.hasOption("port"))) {
+				System.out.println(sdf.format(new Date())
+						+ " - [EZShare.server] - [Error] - securet port cannot start with other port together");
+				System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+				return;
+			}
+			if (commandLine.hasOption("sport")) {
+				String value = commandLine.getOptionValue("sport");
+				if (value == null) {// sport cannot with arg ERR
+					System.out.println(
+							sdf.format(new Date()) + " - [EZShare.server] - [Error] - Command 'sport' should have arg");
+					System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+					return;
+				} else {
+					if (Kits.isNumeric(value)) {// arg is number
+						// Port p = new Port();
+						int securePortInt = Integer.parseInt(value);
+						port.bindtoSecurePort(securePortInt);
+						port.setisSecure(true);
+					} else {// arg is not number
+						System.out.println(sdf.format(new Date())
+								+ " - [EZShare.server] - [Error] - Command 'sport' should have integer arg");
+						System.out.println(sdf.format(new Date()) + " - [EZShare.server] - [INFO] - server shutdown");
+						return;
+					}
+				}
+			}
+
+			// ------------------------------securePort----------------------------------------------//
 			
 			///////starting without arg
 			if(!commandLine.hasOption("s")){
@@ -143,8 +195,8 @@ public class Main {
 				aHost.setAdvertiseHost();
 			}
 			
-			if(!commandLine.hasOption("p")){
-				Port port = new Port();
+			if(!commandLine.hasOption("p")&&!commandLine.hasOption("sport")){
+				//Port port = new Port();
 				port.bindtoPort();
 			}
 			
@@ -166,6 +218,13 @@ public class Main {
 //		port.bindtoPort();
 
 		System.out.println(sdf.format(new Date())+" - [EZShare.server] - [INFO] - started");
+		// ------------------------------securePort----------------------------------------------//
+		if (port.getisSecure() == true) {
+			System.out.println(sdf.format(new Date())
+					+ " - [EZShare.server] - [INFO] - ******************Securce Connection Started******************");
+		}
+		// ------------------------------securePort----------------------------------------------//
+		
 		
 		Timer timer = new Timer();
 		/*
@@ -222,33 +281,21 @@ public class Main {
 	     opt.setRequired(false);
 	     options.addOption(opt6);
 	     
+			// ------------------------------securePort----------------------------------------------//
+			Option opt7 = new Option("sport", true, "start secure connection");
+			opt.setRequired(false);
+			options.addOption(opt7);
+			// ------------------------------securePort----------------------------------------------//
+	     
 	}
 	
-	public static void addServerList(String server) {
-		serverList.add(server);
-		if(!observerList.isEmpty()) {
-			for(SubscribeProcessor sub : observerList) {
-				ClientJSON cJSON = sub.cJSON;
-				if(cJSON.getRelay().equals("true")) {
-					String id = cJSON.getId();
-					
-					cJSON = new ClientJSON();
-					cJSON.setCommand("UNSUBSCRIBE");
-					cJSON.setId(id);
-					
-					String[] s = server.split(":");
-					String address = s[0];
-					int port = Integer.valueOf(s[1]);
-					new SubscribeSender(address,port,cJSON);
-				}
-			}
-		}
-	}
 	
 	public static void addResource(Resource e) throws IOException {
 		resourceList.add(e);
 		notifyObservers(e);
 	}
+	
+	
 	
 	public static void register(SubscribeProcessor sub){
 		observerList.add(sub);
@@ -263,6 +310,40 @@ public class Main {
 	           observer.update((Resource) e);
 	       }
 	}
+	
+	public static void addServerList(String server) {
+		serverList.add(server);
+		if(!observerList.isEmpty()) {
+			for(SubscribeProcessor sub : observerList) {
+				ClientJSON cJSON = sub.cJSON;
+				if(cJSON.getRelay().equals("true")) {
+					
+					cJSON.setRelay("false");
+					
+					String[] s = server.split(":");
+					String address = s[0];
+					int port = Integer.valueOf(s[1]);
+					new SubscribeSender(address,port,cJSON);
+				}
+			}
+		}
+	}
+	
+	public static void addSecureServerList(String server) {
+		secureServerList.add(server);
+		if(!observerList.isEmpty()) {
+			for(SubscribeProcessor sub : observerList) {
+				ClientJSON cJSON = sub.cJSON;
+				if(cJSON.getRelay().equals("true")) {
+					cJSON.setRelay("false");
+					
+					String[] s = server.split(":");
+					String address = s[0];
+					int port = Integer.valueOf(s[1]);
+					new SubscribeSender(address,port,cJSON);
+				}
+			}
+		}
+	}
 
 }
-

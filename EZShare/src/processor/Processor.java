@@ -9,25 +9,46 @@ import bean.ClientJSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import serverIO.Listener;
 
 public class Processor {
 	ClientJSON clientJSON;
 	
 	public ClientJSON getClientJSON(JSONObject jObject){
 		if(jObject.get("command").equals("EXCHANGE")){
+			
+			// ------------------------------secure----------------------------------------------//
+			if (Listener.isSecure == true) {
+				clientJSON = new ClientJSON();
+				List<String> temp_secureServerList = new ArrayList<String>();
+				clientJSON.setCommand("EXCHANGE");
+				JSONArray jArray = jObject.getJSONArray("secureServerList");
+				@SuppressWarnings("unchecked")
+				List<JSONObject> JSON_List = JSONArray.toList(jArray, new JSONObject(), new JsonConfig());
+				
+				for(int i=0;i<JSON_List.size();i++){
+					JSONObject json = (JSONObject) JSON_List.get(i);
+					temp_secureServerList.add(json.getString("hostname")+":"+json.getString("port"));
+				}
+				clientJSON.setSecureServerList(temp_secureServerList.toArray(new String[temp_secureServerList.size()]));
+
+			}
+			// ------------------------------secure----------------------------------------------//
+			
+			else{
 			clientJSON = new ClientJSON();
 			List<String> temp_serverList = new ArrayList<String>();
 			clientJSON.setCommand("EXCHANGE");
 			JSONArray jArray = jObject.getJSONArray("serverList");
 			@SuppressWarnings("unchecked")
 			List<JSONObject> JSON_List = JSONArray.toList(jArray, new JSONObject(), new JsonConfig());
-
-			
+		
 			for(int i=0;i<JSON_List.size();i++){
 				JSONObject json = (JSONObject) JSON_List.get(i);
 				temp_serverList.add(json.getString("hostname")+":"+json.getString("port"));
 			}
 			clientJSON.setServerList(temp_serverList.toArray(new String[temp_serverList.size()]));
+			}
 			
 		}
 		else{
@@ -42,8 +63,7 @@ public class Processor {
 		return qp.process(clientJSON);
 	}
 	
-	public void assignSubscribeRequest(SubscribeProcessor subp, DataOutputStream out) throws IOException{
-		
+	public void assignSubscribeRequest(SubscribeProcessor subp, DataOutputStream out) throws IOException{	
 		subp.process(clientJSON, out);
 	}
 	

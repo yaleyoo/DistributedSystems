@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.net.Socket;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,12 +12,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 import bean.ClientJSON;
+import bean.KeyUtil;
 import bean.Resource;
 import bean.ResourceTemplate;
 import net.sf.json.JSONObject;
 
-public class QuerySender implements Callable<Object> {
+public class SecureQuerySender implements Callable<Object> {
 	boolean is_End = false;
 	DataInputStream input;
 	DataOutputStream output;
@@ -25,7 +29,7 @@ public class QuerySender implements Callable<Object> {
 	int port;
 	JSONObject jObject;
 
-	public QuerySender(String add, int port, ClientJSON cJSON) {
+	public SecureQuerySender(String add, int port, ClientJSON cJSON) {
 		this.add = add;
 		this.port = port;
 
@@ -37,19 +41,33 @@ public class QuerySender implements Callable<Object> {
 	@Override
 	public List<Resource> call() throws Exception {
 		// TODO Auto-generated method stub
-
-		Socket socket = null;
+		// System.setProperty("javax.net.debug", "ssl,handshake");
+//		System.setProperty("javax.net.ssl.trustStore", "././Key/serverkey/SecureQuerySendertrust.jks");
+//		System.setProperty("javax.net.ssl.keyStorePassword", "123456");
+		InputStream keystoreInput = Thread.currentThread().getContextClassLoader()
+			    .getResourceAsStream("serverkey/SecureQuerySenderkeys.jks");
+		InputStream truststoreInput = Thread.currentThread().getContextClassLoader()
+			    .getResourceAsStream("serverkey/SecureQuerySendertrust.jks");
+		KeyUtil.setSSLFactories(keystoreInput, "123456", truststoreInput);
+		keystoreInput.close();
+		truststoreInput.close();
+ 
+		// Socket socket = null;
+		SSLSocket sslsocket = null;
 		List<Resource> list = new ArrayList<Resource>();
 		try {
-			socket = new Socket(add, port);
 
-			input = new DataInputStream(socket.getInputStream());
-			output = new DataOutputStream(socket.getOutputStream());
+			SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			sslsocket = (SSLSocket) sslsocketfactory.createSocket(add, port);
+
+			// socket = new Socket(add, port);
+
+			DataInputStream input = new DataInputStream(sslsocket.getInputStream());
+			DataOutputStream output = new DataOutputStream(sslsocket.getOutputStream());
 
 			output.writeUTF(jObject.toString());
 
 			boolean isEndFlag = false;
-
 			while (!isEndFlag) {
 				try {
 					String reply = input.readUTF();
@@ -77,9 +95,9 @@ public class QuerySender implements Callable<Object> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			if (socket != null) {
+			if (sslsocket != null) {
 				try {
-					socket.close();
+					sslsocket.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -8,6 +8,7 @@ public class ClientJSON {
 	private String id;
 	private ResourceTemplate resourceTemplate;
 	private String[] serverList;
+	private String[] secureServerList;
 	
 	
 	////getter&setter
@@ -53,5 +54,15 @@ public class ClientJSON {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	// ------------------------------secureExchange----------------------------------------------//
+	public String[] getSecureServerList() {
+		return secureServerList;
+	}
+
+	public void setSecureServerList(String[] secureServerList) {
+		this.secureServerList = secureServerList;
+	}
+	// ------------------------------secureExchange----------------------------------------------//
 	
 }

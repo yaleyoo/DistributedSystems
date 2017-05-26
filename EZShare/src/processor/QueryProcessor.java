@@ -17,7 +17,9 @@ import bean.Resource;
 import bean.ResourceTemplate;
 import net.sf.json.JSONObject;
 import server.Main;
+import serverIO.Listener;
 import serverIO.QuerySender;
+import serverIO.SecureQuerySender;
 
 public class QueryProcessor {
 	int match_num = 0;
@@ -143,31 +145,69 @@ public class QueryProcessor {
 		 * 
 		 * */
 		
-		if(cJSON.getRelay().equals("true")){
-			ExecutorService pool = Executors.newCachedThreadPool(); 
-			
-			int num = 0;
-			int size = Main.serverList.size();
-			Future<Object> future1 = null; 
-			Future<Object> future2 = null;
-			Future<Object> future3 = null; 
-			/*
-			 * modify
-			 * */
-			for(String server: Main.serverList){
-				String[] s = server.split(":");
-				String address = s[0];
-				int port = Integer.valueOf(s[1]);
+		// ------------------------------secureQueryRelay----------------------------------------------//
+
+		if (cJSON.getRelay().equals("true")) {
+			ExecutorService pool = Executors.newCachedThreadPool();
+
+			if (Listener.isSecure == true) {
+				
+				int num = 0;
+				int size = Main.secureServerList.size();
+				Future<Object> future1 = null;
+				Future<Object> future2 = null;
+				Future<Object> future3 = null;
 				/*
-				 * secure issue modify here
-				 * */
-				Callable<Object> qs = new QuerySender(address, port,cJSON);
-				
-				if(num%3==0){
-					future1 = pool.submit(qs);
-					if(num==size-1){
+				 * modify
+				 */
+				for (String server : Main.secureServerList) {
+					String[] s = server.split(":");
+					String address = s[0];
+					int port = Integer.valueOf(s[1]);
+					/*
+					 * secure issue modify here
+					 */
+					Callable<Object> qs = new SecureQuerySender(address, port, cJSON);
+
+					if (num % 3 == 0) {
+						future1 = pool.submit(qs);
+						if (num == size - 1) {
+							try {
+								match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (TimeoutException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} else if (num % 3 == 1) {
+						future2 = pool.submit(qs);
+						if (num == size - 1) {
+							try {
+								match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+								match_List.addAll((List<Resource>) future2.get(5, TimeUnit.SECONDS));
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (TimeoutException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} else if (num % 3 == 2) {
+						future3 = pool.submit(qs);
 						try {
-							match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future2.get(5, TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future3.get(5, TimeUnit.SECONDS));
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -178,14 +218,71 @@ public class QueryProcessor {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+
 					}
+
+					num++;
 				}
-				else if(num%3==1){
-					future2 = pool.submit(qs);
-					if(num==size-1){
+
+			}
+
+			else {
+				int num = 0;
+				int size = Main.serverList.size();
+				Future<Object> future1 = null;
+				Future<Object> future2 = null;
+				Future<Object> future3 = null;
+				/*
+				 * modify
+				 */
+				for (String server : Main.serverList) {
+					String[] s = server.split(":");
+					String address = s[0];
+					int port = Integer.valueOf(s[1]);
+					/*
+					 * secure issue modify here
+					 */
+					Callable<Object> qs = new QuerySender(address, port, cJSON);
+
+					if (num % 3 == 0) {
+						future1 = pool.submit(qs);
+						if (num == size - 1) {
+							try {
+								match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (TimeoutException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} else if (num % 3 == 1) {
+						future2 = pool.submit(qs);
+						if (num == size - 1) {
+							try {
+								match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+								match_List.addAll((List<Resource>) future2.get(5, TimeUnit.SECONDS));
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (TimeoutException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} else if (num % 3 == 2) {
+						future3 = pool.submit(qs);
 						try {
-							match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
-							match_List.addAll((List<Resource>) future2.get(5,TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future1.get(5, TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future2.get(5, TimeUnit.SECONDS));
+							match_List.addAll((List<Resource>) future3.get(5, TimeUnit.SECONDS));
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -196,30 +293,15 @@ public class QueryProcessor {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+
 					}
+
+					num++;
 				}
-				else if(num%3==2){
-					future3 = pool.submit(qs);
-					try {
-						match_List.addAll((List<Resource>) future1.get(5,TimeUnit.SECONDS));
-						match_List.addAll((List<Resource>) future2.get(5,TimeUnit.SECONDS));
-						match_List.addAll((List<Resource>) future3.get(5,TimeUnit.SECONDS));
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (TimeoutException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} 
-					
-				}
-				
-				num++;
 			}
 		}
+		
+		// ------------------------------secureQueryRelay----------------------------------------------//
 		
 		/*
 		 * 

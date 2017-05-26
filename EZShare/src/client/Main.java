@@ -121,9 +121,28 @@ public class Main {
 				String value = commandLine.getOptionValue("id");
 				Subscribe.id = value;
 			}
+			
+			// ------------------------------securePort----------------------------------------------//
+			
+			if(commandLine.hasOption("secure")&&commandLine.hasOption("port")){
+				//stub
+				String value = commandLine.getOptionValue("port");
+				Sender.SecurtPort = Integer.valueOf(value);
+				Sender.isSecure = true;
+			}
+			
+			if(commandLine.hasOption("secure")&&!commandLine.hasOption("port")){
+				//stub
+				Sender.SecurtPort = 3781;
+				Sender.isSecure = true;
+			}
+			
+			// ------------------------------securePort----------------------------------------------//
+			
 			////////functional commands
-
-			if(commandLine.hasOption("exchange")){
+			
+			// ------------------------------secureExchange----------------------------------------------//
+			if(commandLine.hasOption("exchange")&&!commandLine.hasOption("secure")){
 				//stub
 				String value = commandLine.getOptionValue("servers");
 				try{
@@ -137,9 +156,28 @@ public class Main {
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 					System.out.println(sdf.format(new Date())+" - [EZShare.client] - [ERROR] - servers are missing");
 				}
-				
-				
 			}
+			
+			if(commandLine.hasOption("exchange")&&commandLine.hasOption("secure")){
+				//stub
+				String value = commandLine.getOptionValue("servers");
+				try{
+					String[] secureServerList = value.split(",");
+					Exchange exchange = new Exchange();
+					exchange.setCommand("EXCHANGE");
+					exchange.setSecureServerList(secureServerList);
+					
+					exchange.sendSecureRequest();
+				}catch(Exception e){
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+					System.out.println(sdf.format(new Date())+" - [EZShare.client] - [ERROR] - servers are missing");
+				}
+			}
+			
+			
+			
+			// ------------------------------secureExchange----------------------------------------------//
+
 			
 			if(commandLine.hasOption("fetch")){
 				//stub
@@ -298,6 +336,12 @@ public class Main {
 	     Option opt21 = new Option("id",true,"the id of your subscribe command");
 	     opt.setRequired(false);
 	     options.addOption(opt21);
+	     
+	     //secure-------------------------
+	     Option opt22 = new Option("secure",false,"secure connection");
+	     opt.setRequired(false);
+	     options.addOption(opt22);
+	     //secure-------------------------
 	}
 
 }

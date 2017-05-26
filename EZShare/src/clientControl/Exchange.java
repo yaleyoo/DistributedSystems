@@ -21,6 +21,13 @@ public class Exchange {
 	public void setServerList(String[] serverList) {
 		this.clientJSON.setServerList(serverList);
 	}
+	
+	// ------------------------------secureExchange----------------------------------------------//
+	public void setSecureServerList(String[] secureServerList) {
+		this.clientJSON.setSecureServerList(secureServerList);
+	}
+	// ------------------------------secureExchange----------------------------------------------//
+	
 	public void sendRequest() {
 		JSONObject exchangeItems = new JSONObject();
 
@@ -42,4 +49,32 @@ public class Exchange {
 		Sender sender = new Sender();
 		sender.sendRequest(exchangeItems);
 	}
+	
+	// ------------------------------secureExchange----------------------------------------------//
+
+	public void sendSecureRequest() {
+		JSONObject secureExchangeItems = new JSONObject();
+
+		String[] secureServerLists = clientJSON.getSecureServerList();
+
+		JSONArray value = new JSONArray();
+
+		for (String secureServerList : secureServerLists) {
+			String[] secureServer = secureServerList.split(":");
+			JSONObject temp = new JSONObject();
+			temp.put("hostname", secureServer[0]);
+			temp.put("port", secureServer[1]);
+			value.add(temp);
+		}
+
+		secureExchangeItems.put("command", clientJSON.getCommand());
+		secureExchangeItems.put("secureServerList", value);
+
+		Sender sender = new Sender();
+		sender.setisSecure(true);
+		sender.sendRequest(secureExchangeItems);
+	}
+
+	// ------------------------------secureExchange----------------------------------------------//
+	
 }
